@@ -53,31 +53,31 @@ public class DAG {
 //			critical_path= (int) Math.max(3,Math.random() *critical_path );
 //			parallelism = (int) Math.max(3,Math.random() *parallelism );
 
-		// ²½Öè1 ¹¹½¨DAGÃ¿²ãµÄ½ÚµãÊıÁ¿
-		int node_num = 0; // µ±Ç°½Úµã±àºÅ£¬ÊäÈëÍê³É¼´±ä³É½ÚµãÊıÁ¿²ÎÊı
+		// æ­¥éª¤1 æ„å»ºDAGæ¯å±‚çš„èŠ‚ç‚¹æ•°é‡
+		int node_num = 0; // å½“å‰èŠ‚ç‚¹ç¼–å·ï¼Œè¾“å…¥å®Œæˆå³å˜æˆèŠ‚ç‚¹æ•°é‡å‚æ•°
 		node_list = new ArrayList<Integer>();
-		node_list.add(1); // Í·¼ÓÒ»¸ö½Úµã
+		node_list.add(1); // å¤´åŠ ä¸€ä¸ªèŠ‚ç‚¹
 		dag_node_group = new ArrayList<ArrayList<Integer>>();
 		dag_node_group.add(new ArrayList<Integer>());
-		dag_node_group.get(0).add(++node_num); // ÊäÈëµÚÒ»²ã½Úµã
+		dag_node_group.get(0).add(++node_num); // è¾“å…¥ç¬¬ä¸€å±‚èŠ‚ç‚¹
 
 		for (int i = 1; i < critical_path - 1; i++) {
-			node_list.add(parallelism); // Ëæ»úÃ¿´Î½ÚµãÊıÁ¿£¬²»¿É³¬¹ı²¢ĞĞ¶È´óĞ¡
+			node_list.add(parallelism); // éšæœºæ¯æ¬¡èŠ‚ç‚¹æ•°é‡ï¼Œä¸å¯è¶…è¿‡å¹¶è¡Œåº¦å¤§å°
 			dag_node_group.add(new ArrayList<Integer>());
 			for (int j = 0; j < node_list.get(i); j++) {
 				dag_node_group.get(i).add(++node_num);
 			}
 		}
-		node_list.add(1); // Î²¼ÓÒ»¸ö½Úµã
+		node_list.add(1); // å°¾åŠ ä¸€ä¸ªèŠ‚ç‚¹
 		dag_node_group.add(new ArrayList<Integer>());
 		dag_node_group.get(critical_path - 1).add(++node_num);
 
-		// ²½Öè2 ¿ªÊ¼Éú³ÉÂ·¾¶
-		List<Integer> suce_list = new ArrayList<Integer>(); // ËùÓĞºó¼Ì²ãµÄ½Úµã
-		List<Integer> ance_list = new ArrayList<Integer>(); // ËùÓĞ³ıÁËÇ°Çı²ãµÄ×æÏÈ½Úµã
+		// æ­¥éª¤2 å¼€å§‹ç”Ÿæˆè·¯å¾„
+		List<Integer> suce_list = new ArrayList<Integer>(); // æ‰€æœ‰åç»§å±‚çš„èŠ‚ç‚¹
+		List<Integer> ance_list = new ArrayList<Integer>(); // æ‰€æœ‰é™¤äº†å‰é©±å±‚çš„ç¥–å…ˆèŠ‚ç‚¹
 		List<Integer> self_list = new ArrayList<Integer>();
 		List<Integer> desc_list = new ArrayList<Integer>();
-		List<List<Integer>> edge_list = new ArrayList<List<Integer>>(); // ¼ÇÂ¼±ß£¬ÏàÁÚÁ½¸öÔªËØÖ®¼äÓĞ±ß
+		List<List<Integer>> edge_list = new ArrayList<List<Integer>>(); // è®°å½•è¾¹ï¼Œç›¸é‚»ä¸¤ä¸ªå…ƒç´ ä¹‹é—´æœ‰è¾¹
 		List<Integer> t_group = new ArrayList<Integer>();
 
 		for (int i = 1; i < critical_path - 1; i++) {
@@ -96,15 +96,15 @@ public class DAG {
 			}
 			for (int j = 0; j < self_list.size(); j++) {
 				// int k1 = Math.max((int)(Math.random() * ance_list.size()), 1);
-				// //Ëæ»ú³éÈ¡m¸öÇ°Çı½Úµã,1~size
+				// //éšæœºæŠ½å–mä¸ªå‰é©±èŠ‚ç‚¹,1~size
 				// int k2 = Math.max((int)(Math.random() * desc_list.size()), 1);
-				// //Ëæ»ú³éÈ¡m¸öÇ°Çı½Úµã,1~size
+				// //éšæœºæŠ½å–mä¸ªå‰é©±èŠ‚ç‚¹,1~size
 				//
-				int k1 = Math.max((int) (Math.random() * Math.ceil(ance_list.size() / 2)), 1); // Ëæ»ú³éÈ¡m¸öÇ°Çı½Úµã,1~size
-				int k2 = Math.max((int) (Math.random() * Math.ceil(desc_list.size() / 2)), 1); // Ëæ»ú³éÈ¡m¸öÇ°Çı½Úµã,1~size
+				int k1 = Math.max((int) (Math.random() * Math.ceil(ance_list.size() / 2)), 1); // éšæœºæŠ½å–mä¸ªå‰é©±èŠ‚ç‚¹,1~size
+				int k2 = Math.max((int) (Math.random() * Math.ceil(desc_list.size() / 2)), 1); // éšæœºæŠ½å–mä¸ªå‰é©±èŠ‚ç‚¹,1~size
 
 				t_group.clear();
-				while (t_group.size() < k1) { // Ëæ»ú³éÈ¡m¸öÇ°Çı½Úµã
+				while (t_group.size() < k1) { // éšæœºæŠ½å–mä¸ªå‰é©±èŠ‚ç‚¹
 					int t = (int) (Math.random() * ance_list.size());// 1 - m
 					if (!t_group.contains(t)) {
 						t_group.add(t);
@@ -118,7 +118,7 @@ public class DAG {
 				}
 
 				t_group.clear();
-				while (t_group.size() < k2) { // Ëæ»ú³éÈ¡m¸öÇ°Çı½Úµã
+				while (t_group.size() < k2) { // éšæœºæŠ½å–mä¸ªå‰é©±èŠ‚ç‚¹
 					int t = (int) (Math.random() * desc_list.size());// 1 - m
 					if (!t_group.contains(t)) {
 						t_group.add(t);
@@ -136,11 +136,11 @@ public class DAG {
 			edge_list.get(edge_list.size() - 1).add(desc_list.get(0));
 		}
 		// System.out.println(edge_list);
-		double path[][] = new double[node_num][node_num]; // Éú³ÉÁÚ½Ó¾ØÕó
+		double path[][] = new double[node_num][node_num]; // ç”Ÿæˆé‚»æ¥çŸ©é˜µ
 		for (int i = 0; i < edge_list.size(); i++) {
 			path[(int) edge_list.get(i).get(0) - 1][(int) edge_list.get(i).get(1) - 1] = 1;
 		}
-		// System.out.println("Êä³öÔ­Ê¼ÁÚ½Ó¾ØÕó");
+		// System.out.println("è¾“å‡ºåŸå§‹é‚»æ¥çŸ©é˜µ");
 		// out_put_Matrix(path);
 		double iden_d[][] = new double[node_num][node_num];
 		iden_d = getIdentity(node_num);
@@ -327,7 +327,7 @@ public class DAG {
 		
 		
 
-		// ¼ÆËãconcurrent node
+		// è®¡ç®—concurrent node
 
 		for (int i = 0; i < DagList.size(); i++) {
 
@@ -396,7 +396,7 @@ public class DAG {
 
 	}
 
-//²âÊÔ×é	
+//æµ‹è¯•ç»„	
 
 //	public int parallelism	;
 //	public int critical_path;
@@ -616,7 +616,7 @@ public class DAG {
 //
 //}
 
-	/* ´´½¨µ¥Î»¾ØÕó */
+	/* åˆ›å»ºå•ä½çŸ©é˜µ */
 	public double[][] getIdentity(int size) {
 		double[][] matrix = new double[size][size];
 		for (int i = 0; i < size; i++)
@@ -624,7 +624,7 @@ public class DAG {
 		return matrix;
 	}
 
-	/* ¾ØÕóÏà³Ë */
+	/* çŸ©é˜µç›¸ä¹˜ */
 	public double[][] matrix_multiplication_bool(double[][] M1, double[][] M2) {
 		int m_size = M1.length;
 		double[][] matrix = new double[m_size][m_size];
@@ -644,7 +644,7 @@ public class DAG {
 		return matrix;
 	}
 
-	/* ¾ØÕóÇóÃİ */
+	/* çŸ©é˜µæ±‚å¹‚ */
 	public double[][] matrix_pow_bool(double[][] M, int pow_num) {
 		int m_size = M.length;
 		double[][] matrix_1 = new double[m_size][m_size];
@@ -658,7 +658,7 @@ public class DAG {
 		return matrix_1;
 	}
 
-	/* ¾ØÕóÈ¡»ò */
+	/* çŸ©é˜µå–æˆ– */
 	public double[][] matrix_or_bool(double[][] M1, double[][] M2) {
 		int m_size = M1.length;
 		double[][] matrix = new double[m_size][m_size];
@@ -677,7 +677,7 @@ public class DAG {
 		return matrix;
 	}
 
-	/* ¾ØÕóÈ¡Óë */
+	/* çŸ©é˜µå–ä¸ */
 	public double[][] matrix_and_bool(double[][] M1, double[][] M2) {
 		int m_size = M1.length;
 		double[][] matrix = new double[m_size][m_size];
@@ -696,7 +696,7 @@ public class DAG {
 		return matrix;
 	}
 
-	/* ¾ØÕóÈ¡Äæ */
+	/* çŸ©é˜µå–é€† */
 	public double[][] matrix_inverse(double[][] M) {
 		int m_size = M.length;
 		double[][] matrix = new double[m_size][m_size];
@@ -714,7 +714,7 @@ public class DAG {
 		return matrix1;
 	}
 
-	/* ´òÓ¡¾ØÕó */
+	/* æ‰“å°çŸ©é˜µ */
 	public void out_put_Matrix(double[][] M) {
 //		int m_size = M.length;
 		for (int i = 0; i < M.length; i++) {
@@ -738,7 +738,7 @@ public class DAG {
 		int m_size = adj_matrix.length;
 		double[][] critic_p = new double[m_size][2];
 		double[] critic_buf = new double[2];
-		List<Integer> critic_list = new ArrayList<Integer>(); // ËùÓĞºó¼Ì²ãµÄ½Úµã
+		List<Integer> critic_list = new ArrayList<Integer>(); // æ‰€æœ‰åç»§å±‚çš„èŠ‚ç‚¹
 		critic_p[0][0] = 0;
 		critic_p[0][1] = WCET[0];
 		for (int i = 1; i < m_size; i++) {

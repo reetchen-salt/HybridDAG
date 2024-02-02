@@ -46,7 +46,9 @@ public class Node {
 	private long tempf=0;
 	
 
+	public long [] simulation;
 	
+	public long f;
 	
 	public long path;
 	public long frontpath;
