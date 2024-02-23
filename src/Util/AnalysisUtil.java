@@ -171,6 +171,10 @@ public class AnalysisUtil {
         	Dag2.add(new Node(Dag1.get(i).getWCET(), Dag1.get(i).getIndex()));
         	
         	Dag2.get(i).setPriority(Dag1.get(i).getPriority());
+        	
+        	
+        	
+        	Dag2.get(i).setTempf(Dag1.get(i).getTempf());
      
         	
         	Dag2.get(i).frontpath = Dag1.get(i).frontpath;
@@ -523,7 +527,7 @@ public class AnalysisUtil {
 	public void printDAG(DAG task) {
 		
 		
-//´òÓ¡       
+//ï¿½ï¿½Ó¡       
 		
 		System.out.println("\n the priority of the DAG is: \n"+ task.getPriority());
 		
@@ -545,7 +549,7 @@ public class AnalysisUtil {
 		}
 		
 		
-        System.out.println("\nÊä³öandÕó");
+        System.out.println("\nï¿½ï¿½ï¿½andï¿½ï¿½");
         
         
         out_put_Matrix(task.matrix_result);
