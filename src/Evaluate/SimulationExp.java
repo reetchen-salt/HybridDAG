@@ -35,9 +35,9 @@ public class SimulationExp {
 
 	public static void main(String args[]) throws Exception {
 
-		int[] Core = { 2 };
+		int[] Core = { 3 };
 
-		int[] Par = { 3 };
+		int[] Par = { 4 };
 
 		int[] Cri = { 4 };
 

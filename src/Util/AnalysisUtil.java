@@ -2,6 +2,7 @@ package Util;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -454,6 +455,89 @@ public class AnalysisUtil {
 
 	
 	}
+	
+	
+	
+	public boolean getPath(ArrayList<Node> list, Node theOne, int number) {
+
+		
+		ArrayList<Node> remove = new ArrayList<Node>();
+		
+		
+		for(Node node1: list) {
+			
+			if(node1.predecessor.containsAll(theOne.predecessor)) {
+				
+				remove.addAll(node1.Descendant);
+				
+			}
+			
+		}
+		
+		list.removeAll(remove);
+		
+		
+		
+		
+		ArrayList<ArrayList<Node>> twoDList = new ArrayList<ArrayList<Node>>();
+
+		for (Node node1 : list) {
+
+			ArrayList<Node> conList = new ArrayList<Node>();
+			conList.add(node1);
+			twoDList.add(conList);
+		}
+
+		for (Node node1 : list) {
+
+			for (ArrayList<Node> thelist : twoDList) {
+
+				if (node1.concurrent.containsAll(thelist)) {
+
+					thelist.add(node1);
+
+				}
+
+			}
+
+		}
+
+		twoDList.sort((l1, l2) -> l2.size() - l1.size());
+
+		twoDList.forEach(list2 -> Collections.sort(list2, Comparator.comparingInt(Node::getPriority)));
+
+		boolean interference = false;
+
+		for (ArrayList<Node> thelist : twoDList) {
+
+			if (thelist.size() > number && thelist.get(0).getPriority() <= theOne.getPriority()) {
+
+				interference = true;
+
+			}
+
+		}
+
+		return interference;
+
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	public int numPath(ArrayList<Node> list, Node theOne, int number) {
