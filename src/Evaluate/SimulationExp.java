@@ -116,6 +116,8 @@ public class SimulationExp {
 				critical_path, ratio);
 
 		long makespan1 = 0;
+		
+		int anomalyDetected =0;
 
 		for (int i = 0; i < TOTAL_NUMBER_OF_SYSTEMS; i++) {
 
@@ -136,11 +138,19 @@ public class SimulationExp {
 			
 
 
-		    new AnomalyAnalysis().AnalyzeAnomaly(tasks.get(0).DagList, core);
+		    if(new AnomalyAnalysis().AnalyzeAnomaly(tasks.get(0).DagList, core)) {
+		    	
+		    	anomalyDetected++;
+		    	
+		    }
 	
 			
 
 		}
+		
+		System.out.print("\n so, in total the anomaly number of DAG tasks is "+anomalyDetected);
+		
+		
 
 	}
 
