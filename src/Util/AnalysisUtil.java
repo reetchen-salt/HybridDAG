@@ -464,6 +464,9 @@ public class AnalysisUtil {
 		ArrayList<Node> remove = new ArrayList<Node>();
 		
 		
+		// for those who release at the same time or later than theOne, if 
+		// it cannot block, its successor cannot block
+		
 		for(Node node1: list) {
 			
 			if(node1.predecessor.containsAll(theOne.predecessor)) {
@@ -509,11 +512,26 @@ public class AnalysisUtil {
 		boolean interference = false;
 
 		for (ArrayList<Node> thelist : twoDList) {
-
+			
 			if (thelist.size() > number && thelist.get(0).getPriority() <= theOne.getPriority()) {
-
-				interference = true;
-
+					
+				ArrayList<Node> newParallel = new ArrayList<Node>(thelist);
+				for(Node node1: thelist ) {		
+					
+					if(node1.getStart()<theOne.getStart()){
+						
+						newParallel.remove(node1);						
+						
+					}
+				}
+					newParallel.sort((p1, p2) -> Integer.compare(p1.getPriority(), p2.getPriority()));
+					
+					if(newParallel.get(0).getPriority() <= theOne.getPriority()) {
+	
+						interference = true;
+					}
+				
+			
 			}
 
 		}
