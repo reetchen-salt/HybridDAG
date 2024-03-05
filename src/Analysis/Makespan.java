@@ -14,11 +14,11 @@ public class Makespan {
 
 	public long getMakespan(ArrayList<Node> tdag, int Ncore) {
 
-//		for (Node A : tdag) {
-//
-//			A.selfclean();
-//
-//		}
+		for (Node A : tdag) {
+
+			A.selfclean();
+
+		}
 
 		// �������нڵ�
 		ArrayList<Node> tempdag = new ArrayList<Node>();
@@ -92,8 +92,8 @@ public class Makespan {
 		makespan = CoreList.get(CoreList.size() - 1).getLoad();
 
 		
-		
-		new Util.PrintGantt(CoreList, makespan);
+//		
+//		new Util.PrintGantt(CoreList, makespan);
 
 		return makespan;
 

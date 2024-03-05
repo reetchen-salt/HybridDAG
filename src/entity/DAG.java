@@ -211,7 +211,7 @@ public class DAG {
 
 //		System.out.print(" total WCET list is " + TotalWCET+ "\n" );
 
-	      TotalWCET =50;
+//	      TotalWCET =20;
 
 		Random rand = new Random();
 

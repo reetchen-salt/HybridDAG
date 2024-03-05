@@ -14,6 +14,7 @@ import entity.Node;
 import GenerationTool.PriorityGenerator;
 import GenerationTool.SimpleSystemGenerator;
 import Util.AnalysisUtil;
+import Analysis.Nonpreemptive;
 import Analysis.AnomalyAnalysis;
 import Analysis.Makespan;
 import entity.DAG;
@@ -35,15 +36,15 @@ public class SimulationExp {
 
 	public static void main(String args[]) throws Exception {
 
-		int[] Core = { 3 };
+		int[] Core = { 3,4,6,7,8,9 };
 
-		int[] Par = { 4 };
+		int[] Par = { 4,5,6,7,8,9,10 };
 
-		int[] Cri = { 4 };
+		int[] Cri = { 4,5,6,7,8,9,10 };
 
 		double[] ratio = { 0.2 };
 
-		int times = 1;
+		int times = 1000;
 
 		SimulationExp ep = new SimulationExp();
 
@@ -69,40 +70,40 @@ public class SimulationExp {
 
 		ad.await();
 
-//		for (int t = 0; t < Par.length; t++) {
-//			
-//			final int not=t;
-//
-//			new Thread(new Runnable() {
-//				@Override
-//				public void run() {
-//				
-//					ep.PriorityOrder(Core[0], Par[not], Cri[0], times,"NoPar");
-//					
-//					ep.countDown(bd);
-//				}
-//			}).start();
-//			
-//		}
-//		bd.await();
-//		
-//
-//		for (int a = 0; a < Cri.length; a++) {
-//			
-//			final int noa=a;
-//
-//			new Thread(new Runnable() {
-//				@Override
-//				public void run() {
-//					ep.PriorityOrder(Core[0], Par[0], Cri[noa], times,"NoCri");
-//					
-//					ep.countDown(cd);
-//
-//				}
-//			}).start();
-//			
-//		}
-//		cd.await();
+		for (int t = 0; t < Par.length; t++) {
+			
+			final int not=t;
+
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+				
+					ep.PriorityOrder(Core[0], Par[not], Cri[0], times,"NoPar", ratio[0]);
+					
+					ep.countDown(bd);
+				}
+			}).start();
+			
+		}
+		bd.await();
+		
+
+		for (int a = 0; a < Cri.length; a++) {
+			
+			final int noa=a;
+
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					ep.PriorityOrder(Core[0], Par[0], Cri[noa], times,"NoCri", ratio[0]);
+					
+					ep.countDown(cd);
+
+				}
+			}).start();
+			
+		}
+		cd.await();
 //		
 
 	}
@@ -116,8 +117,14 @@ public class SimulationExp {
 				critical_path, ratio);
 
 		long makespan1 = 0;
+		long makespan2 = 0;
 		
 		int anomalyDetected =0;
+		int tigter =0;
+		
+		
+
+		
 
 		for (int i = 0; i < TOTAL_NUMBER_OF_SYSTEMS; i++) {
 
@@ -128,14 +135,19 @@ public class SimulationExp {
 
 
 			new PriorityGenerator().MyAssignment(tasks.get(0));
+	
+			
+			makespan2 = new Analysis.Nonpreemptive().WCmakespan(tasks.get(0), core);
+			
 			makespan1 = new Makespan().getMakespan(tasks.get(0).DagList, core);
 			
-			
-			
 	
-		    
-		    new Util.DrawDag(tasks.get(0), tasks.get(0).DagList);
 			
+//			System.out.print("the bound is" + makespan2);
+//	
+//			System.out.print("the simulation is" + makespan1);
+//		    new Util.DrawDag(tasks.get(0), tasks.get(0).DagList);
+//			
 
 
 		    if(new AnomalyAnalysis().AnalyzeAnomaly(tasks.get(0).DagList, core)) {
@@ -143,14 +155,30 @@ public class SimulationExp {
 		    	anomalyDetected++;
 		    	
 		    }
+			if(makespan1 < makespan2) {
+				
+				
+				tigter++;
+				
+				
+			}
+			
+			if(makespan2 < makespan1) {
+				
+				System.err.print("the bound is smaller than simulation");
+				
+			}
+			
+			
 	
 			
 
 		}
 		
-		System.out.print("\n so, in total the anomaly number of DAG tasks is "+anomalyDetected);
+
 		
 		
+		System.out.print("\n ------------------ \n Core:"+ core+ " parallelism:" + parallelism+ "length:"+ critical_path+"\n anomaly: "+anomalyDetected+"\n tighter: "+tigter+ "\n advantage:"+ (tigter-anomalyDetected)+"\n ------------------ \n");
 
 	}
 

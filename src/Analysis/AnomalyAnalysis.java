@@ -86,56 +86,33 @@ public class AnomalyAnalysis {
 			// 判断剩下的节点最多能够堵塞多少路径， 是不是大于M-1个以足够形成干扰
 			if (new AnalysisUtil().getPath(realcon, theNode, (m - 1))) {
 				
-//				ArrayList<Node> newParallel = new ArrayList<Node>(realcon);
-//				
-//				// new analysis for detecting anomaly
-//				for(Node conNode:realcon) {
-//					
-//					if(conNode.getStart()<theNode.getStart()){
-//						
-//						newParallel.remove(conNode);
-//						
-//						
-//						
-//					}
-//					
-//					
-//				}
-//				
-//				for(Node parNode:newParallel) {
-//					
-//					if(parNode.getPriority()< theNode.getPriority()) {
-//					
+
 					
 						anomaly = true;
 						
 	
-						System.out.print("Anomaly of V" + theNode.getIndex() + " is: ");
-	
-						for (Node AnomalyNode : realcon) {
-	
-							System.out.print("V" + AnomalyNode.getIndex() + ", ");
-	
-						}
-	
-						System.out.print("\n");
-				
-//					}
-//					
-//					
-//				}
-//				
+//						System.out.print("Anomaly of V" + theNode.getIndex() + " is: ");
+//	
+//						for (Node AnomalyNode : realcon) {
+//	
+//							System.out.print("V" + AnomalyNode.getIndex() + ", ");
+//	
+//						}
+//	
+//						System.out.print("\n");
+//
+//			
 
 
 			}
 
 		}
 
-		if (anomaly == false) {
-
-			System.out.print("no anomaly\n");
-
-		}
+//		if (anomaly == false) {
+//
+//			System.out.print("no anomaly\n");
+//
+//		}
 
 		
 		return anomaly;
