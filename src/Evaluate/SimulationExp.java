@@ -120,9 +120,9 @@ public class SimulationExp {
 		long makespan2 = 0;
 		
 		int anomalyDetected =0;
-		int tigter =0;
+		double tighter =0;
 		
-		
+		double tighterP= 0;
 
 		
 
@@ -158,11 +158,15 @@ public class SimulationExp {
 			if(makespan1 < makespan2) {
 				
 				
-				tigter++;
+				tighterP += (makespan2-makespan1)/(double)makespan2;
+				
+				tighter++;
+				
 				
 				
 			}
 			
+		
 			if(makespan2 < makespan1) {
 				
 				System.err.print("the bound is smaller than simulation");
@@ -175,10 +179,12 @@ public class SimulationExp {
 
 		}
 		
+		tighterP = (tighterP/(double)tighter)*100;
+		
 
 		
 		
-		System.out.print("\n ------------------ \n Core:"+ core+ " parallelism:" + parallelism+ "length:"+ critical_path+"\n anomaly: "+anomalyDetected+"\n tighter: "+tigter+ "\n advantage:"+ (tigter-anomalyDetected)+"\n ------------------ \n");
+		System.out.print("\n ------------------ \n Core:"+ core+ " parallelism:" + parallelism+ "length:"+ critical_path+"\n anomaly: "+anomalyDetected+"\n tighter: "+tighter+ "\n advantage:"+ (tighter-anomalyDetected)+"\n percentage: "+ tighterP+"%"+"\n ------------------ \n");
 
 	}
 
