@@ -91,28 +91,28 @@ public class AnomalyAnalysis {
 						anomaly = true;
 						
 	
-//						System.out.print("Anomaly of V" + theNode.getIndex() + " is: ");
-//	
-//						for (Node AnomalyNode : realcon) {
-//	
-//							System.out.print("V" + AnomalyNode.getIndex() + ", ");
-//	
-//						}
-//	
-//						System.out.print("\n");
-//
-//			
+						System.out.print("Anomaly of V" + theNode.getIndex() + " is: ");
+	
+						for (Node AnomalyNode : realcon) {
+	
+							System.out.print("V" + AnomalyNode.getIndex() + ", ");
+	
+						}
+	
+						System.out.print("\n");
+
+			
 
 
 			}
 
 		}
 
-//		if (anomaly == false) {
-//
-//			System.out.print("no anomaly\n");
-//
-//		}
+		if (anomaly == false) {
+
+			System.out.print("no anomaly\n");
+
+		}
 
 		
 		return anomaly;

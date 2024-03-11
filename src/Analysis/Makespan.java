@@ -92,8 +92,8 @@ public class Makespan {
 		makespan = CoreList.get(CoreList.size() - 1).getLoad();
 
 		
-//		
-//		new Util.PrintGantt(CoreList, makespan);
+		
+		new Util.PrintGantt(CoreList, makespan);
 
 		return makespan;
 
