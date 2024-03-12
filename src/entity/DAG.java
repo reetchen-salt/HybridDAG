@@ -211,7 +211,7 @@ public class DAG {
 
 //		System.out.print(" total WCET list is " + TotalWCET+ "\n" );
 
-	      TotalWCET =40;
+	      TotalWCET =50;
 
 		Random rand = new Random();
 
@@ -286,7 +286,7 @@ public class DAG {
 
 		// frontpath
 
-		DagList.get(0).frontpath = DagList.get(0).getWCET();
+		DagList.get(0).frontpath = DagList.get(0).getWCET(false);
 
 		for (int i = 1; i < DagList.size(); i++) {
 
@@ -294,13 +294,13 @@ public class DAG {
 
 			Collections.reverse(DagList.get(i).predecessor);
 
-			DagList.get(i).frontpath = DagList.get(i).getWCET() + DagList.get(i).predecessor.get(0).frontpath;
+			DagList.get(i).frontpath = DagList.get(i).getWCET(false) + DagList.get(i).predecessor.get(0).frontpath;
 
 		}
 
 		// backpath
 
-		DagList.get(DagList.size() - 1).backpath = DagList.get(DagList.size() - 1).getWCET();
+		DagList.get(DagList.size() - 1).backpath = DagList.get(DagList.size() - 1).getWCET(false);
 
 		for (int i = DagList.size() - 2; i >= 0; i--) {
 
@@ -308,7 +308,7 @@ public class DAG {
 
 			Collections.reverse(DagList.get(i).successor);
 
-			DagList.get(i).backpath = DagList.get(i).getWCET() + DagList.get(i).successor.get(0).backpath;
+			DagList.get(i).backpath = DagList.get(i).getWCET(false) + DagList.get(i).successor.get(0).backpath;
 
 		}
 
@@ -316,7 +316,7 @@ public class DAG {
 
 		for (int i = 0; i < DagList.size(); i++) {
 
-			DagList.get(i).path = DagList.get(i).backpath + DagList.get(i).frontpath - DagList.get(i).getWCET();
+			DagList.get(i).path = DagList.get(i).backpath + DagList.get(i).frontpath - DagList.get(i).getWCET(false);
 
 		}
 
@@ -386,7 +386,7 @@ public class DAG {
 
 		for (Node A : this.DagList) {
 
-			WCET.add(A.getWCET());
+			WCET.add(A.getWCET(false));
 
 		}
 

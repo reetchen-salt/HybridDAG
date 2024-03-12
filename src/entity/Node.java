@@ -23,6 +23,8 @@ public class Node {
 	public ArrayList<Node> groupA = new ArrayList<Node>();
 	public ArrayList<Node> groupB = new ArrayList<Node>();
 	public ArrayList<Node> groupC = new ArrayList<Node>();
+	
+
 
 	private long lenA;
 
@@ -30,6 +32,8 @@ public class Node {
 	private long lenC;
 
 	public long W;
+	
+	public boolean anomaly = false;
 
 	private long WCET;
 	private int index;
@@ -41,6 +45,13 @@ public class Node {
 	private int taskPriority;
 
 	private long tempf = 0;
+	
+	
+	private long earlyT = 0;
+	private long lateT=0;
+	
+	
+	
 
 	public long[] simulation;
 
@@ -113,10 +124,10 @@ public class Node {
 
 	public long getWeight() {
 
-		weight = getWCET();
+		weight = getWCET(false);
 		for (Node i : Descendant) {
 
-			weight += i.getWCET();
+			weight += i.getWCET(false);
 
 		}
 
@@ -128,10 +139,16 @@ public class Node {
 		return index;
 	}
 
-	public long getWCET() {
+	public long getWCET(boolean isEarlier) {
+	    // Assuming WCET is a variable of a numeric type defined elsewhere in your class
+		if(isEarlier)
+			return (long)(0.5*WCET);
+		else 
+			return WCET;
+			
 
-		return WCET;
 	}
+
 
 	public void setWCET(long W) {
 
@@ -205,12 +222,27 @@ public class Node {
 		return tempf;
 
 	}
+	
+	
 
 	public void setTempf(long tempf) {
 
 		this.tempf = tempf;
 
 	}
+	
+	
+	public long getnewf(boolean isEarly) {
+
+		if(isEarly)
+			return getEarlyT();
+		
+		else
+			return getLateT();
+
+	}
+	
+	
 
 	public long getlenA() {
 
@@ -236,11 +268,34 @@ public class Node {
 
 	}
 
-	public long getStart() {
-
-		return tempf - WCET;
+	public long getStart(boolean isEarly) {
+		
+		if(isEarly) 
+			return getEarlyT() - getWCET(isEarly);
+		else
+			return getLateT()-getWCET(isEarly);
 
 	}
+	
+    // Getter for earlyT
+    public long getEarlyT() {
+        return earlyT;
+    }
+
+    // Setter for earlyT
+    public void setEarlyT(long earlyT) {
+        this.earlyT = earlyT;
+    }
+
+    // Getter for lateT
+    public long getLateT() {
+        return lateT;
+    }
+
+    // Setter for lateT
+    public void setLateT(long lateT) {
+        this.lateT = lateT;
+    }
 
 //	public long getInterference(long point) {
 //		
@@ -261,19 +316,19 @@ public class Node {
 //		
 //	}
 
-	public long Intersum() {
-
-		long interference = 0;
-
-		for (Node inter : Interference) {
-
-			interference += inter.getWCET();
-
-		}
-
-		return interference;
-
-	}
+//	public long Intersum() {
+//
+//		long interference = 0;
+//
+//		for (Node inter : Interference) {
+//
+//			interference += inter.getWCET();
+//
+//		}
+//
+//		return interference;
+//
+//	}
 
 	public void selfclean() {
 

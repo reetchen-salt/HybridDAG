@@ -7,10 +7,17 @@ import entity.Node;
 import java.util.ArrayList;
 
 public class PrintGantt extends JFrame {
+	
+	boolean isEarly ;
     long makespan;
     ArrayList<Core> CoreList = new ArrayList<>();
 
-    public PrintGantt(ArrayList<Core> CoreList, long makespan) {
+    public PrintGantt(ArrayList<Core> CoreList, long makespan, boolean isEarly) {
+    	
+    	
+    
+    	
+    	
         SwingUtilities.invokeLater(() -> {
             setSize(1000, 600);
             setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -19,6 +26,8 @@ public class PrintGantt extends JFrame {
         });
         this.CoreList = CoreList;
         this.makespan = makespan;
+        this.isEarly = isEarly;
+
     }
 
     @Override
@@ -47,7 +56,7 @@ public class PrintGantt extends JFrame {
         long maxFinishTime = 0;
         for (Core core : CoreList) {
             for (Node node : core.Nodes) {
-                long finishTime = node.getStart() + node.getWCET();
+                long finishTime = node.getStart(isEarly) + node.getWCET(isEarly);
                 if (finishTime > maxFinishTime) {
                     maxFinishTime = finishTime;
                 }
@@ -57,13 +66,13 @@ public class PrintGantt extends JFrame {
             for (int j = 0; j < CoreList.get(i).Nodes.size(); j++) {
                 Node node = CoreList.get(i).Nodes.get(j);
                 // Scale the start time and WCET relative to the makespan to calculate position and size
-                int rectStartX = startX + (int) ((double) node.getStart() / makespan * value);
-                int rectWidth = (int) ((double) node.getWCET() / makespan * value);
+                int rectStartX = startX + (int) ((double) node.getStart(isEarly) / makespan * value);
+                int rectWidth = (int) ((double) node.getWCET(isEarly) / makespan * value);
                 
                 // Ensure there's no gap for consecutive tasks (e.g., v6 follows v2 without a gap)
                 if (j > 0) {
                     Node prevNode = CoreList.get(i).Nodes.get(j - 1);
-                    int prevEndX = startX + (int) ((double) (prevNode.getStart() + prevNode.getWCET()) / makespan * value);
+                    int prevEndX = startX + (int) ((double) (prevNode.getStart(isEarly) + prevNode.getWCET(isEarly)) / makespan * value);
                     if (rectStartX < prevEndX) { // Adjust rectStartX if it overlaps with the previous task
                         rectStartX = prevEndX;
                     }
@@ -129,9 +138,9 @@ public class PrintGantt extends JFrame {
                     return; // Stop drawing if we're about to go out of the window bounds
                 }
                 String details = "id:" + node.getIndex() +
-                                 ", start:" + node.getStart() +
-                                 ", WCET:" + node.getWCET() +
-                                 ", Tempf:" + node.getTempf();
+                                 ", start:" + node.getStart(isEarly) +
+                                 ", WCET:" + node.getWCET(isEarly) +
+                                 ", Tempf:" + node.getnewf(isEarly);
                 g.drawString(details, startX, y);
                 y += lineHeight + 5; // Add space between lines
             }

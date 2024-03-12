@@ -53,11 +53,9 @@ public class AnomalyAnalysis {
 
 		DagList.sort((p1, p2) -> Integer.compare(p1.getIndex(), p2.getIndex()));
 
-		// 开始计算每一个节点的最差完成时间
+
 		for (Node theNode : DagList) {
-//			// 首先加入自己得WCET
-//			long WCfinish = theNode.getWCET();
-//
+
 			ArrayList<Node> realcon = new ArrayList<Node>();
 			// 其次在并行节点concurrent 中去除 I_remove
 			for (Node con : theNode.concurrent) {
@@ -73,7 +71,7 @@ public class AnomalyAnalysis {
 			ArrayList<Node> interference = new ArrayList<Node>();
 			for (Node DelayNode : realcon) {
 
-				if (DelayNode.getTempf() <= theNode.getStart()) {
+				if (DelayNode.getLateT() <= theNode.getStart(false)) {
 
 					interference.add(DelayNode);
 
@@ -82,6 +80,7 @@ public class AnomalyAnalysis {
 			}
 			realcon.removeAll(interference);
 			
+
 
 			// 判断剩下的节点最多能够堵塞多少路径， 是不是大于M-1个以足够形成干扰
 			if (new AnalysisUtil().getPath(realcon, theNode, (m - 1))) {
@@ -94,6 +93,7 @@ public class AnomalyAnalysis {
 						System.out.print("Anomaly of V" + theNode.getIndex() + " is: ");
 	
 						for (Node AnomalyNode : realcon) {
+				
 	
 							System.out.print("V" + AnomalyNode.getIndex() + ", ");
 	
@@ -105,6 +105,11 @@ public class AnomalyAnalysis {
 
 
 			}
+			
+			
+			
+			theNode.anomaly = true;
+			
 
 		}
 
@@ -117,6 +122,24 @@ public class AnomalyAnalysis {
 		
 		return anomaly;
 	}
+	
+	
+	
+	
+	
+	
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	

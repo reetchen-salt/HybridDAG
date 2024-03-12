@@ -40,9 +40,9 @@ public class SingleDAG {
 
 		int[] Core = { 3 };
 
-		int[] Par = { 5 };
+		int[] Par = { 3 };
 
-		int[] Cri = { 5 };
+		int[] Cri = { 4 };
 
 		double[] ratio = { 0.2 };
 
@@ -102,13 +102,16 @@ public class SingleDAG {
 			new PriorityGenerator().MyAssignment(tasks.get(0));
 	
 
-			makespan1 = new Makespan().getMakespan(tasks.get(0).DagList, core);
+			makespan1 = new Makespan().getMakespan(tasks.get(0).DagList, core,true);
 			
 
 		    new Util.DrawDag(tasks.get(0), tasks.get(0).DagList);
 			
 
+			makespan1 = new Makespan().getMakespan(tasks.get(0).DagList, core,false);
+			
 
+		    
 		    if(new AnomalyAnalysis().AnalyzeAnomaly(tasks.get(0).DagList, core)) {
 		    	
 		    	anomalyDetected++;

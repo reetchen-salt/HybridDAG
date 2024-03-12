@@ -12,7 +12,11 @@ public class Makespan {
 
 	long makespan = 0;
 
-	public long getMakespan(ArrayList<Node> tdag, int Ncore) {
+	public long getMakespan(ArrayList<Node> tdag, int Ncore, boolean isEarly) {
+		
+
+		
+		
 
 		for (Node A : tdag) {
 
@@ -58,7 +62,7 @@ public class Makespan {
 				if (CoreList.get(0).getLoad() >= readytask.get(i).getLargestP()) {
 
 					CoreList.get(0).Nodes.add(readytask.get(i));
-					readytask.get(i).setTempf(CoreList.get(0).getLoad() + readytask.get(i).getWCET());
+					readytask.get(i).setTempf(CoreList.get(0).getLoad() + readytask.get(i).getWCET(isEarly));
 
 					CoreList.get(0).setLoad(readytask.get(i).getTempf());
 
@@ -77,7 +81,7 @@ public class Makespan {
 
 				CoreList.get(0).Nodes.add(readytask.get(0));
 
-				readytask.get(0).setTempf(readytask.get(0).getLargestP() + readytask.get(0).getWCET());
+				readytask.get(0).setTempf(readytask.get(0).getLargestP() + readytask.get(0).getWCET(isEarly));
 
 				CoreList.get(0).setLoad(readytask.get(0).getTempf());
 
@@ -93,10 +97,48 @@ public class Makespan {
 
 		
 		
-		new Util.PrintGantt(CoreList, makespan);
+		storeData(isEarly,tdag);
+		
+		new Util.PrintGantt(CoreList, makespan, isEarly);
 
 		return makespan;
 
 	}
+	
+	private void storeData(boolean isEarly, ArrayList<Node> dagList) {
+
+		if (isEarly) {
+
+			for (Node theNode : dagList) {
+
+				theNode.setEarlyT(theNode.getTempf());
+
+			}
+
+		} else {
+
+			for (Node theNode : dagList) {
+
+				theNode.setLateT(theNode.getTempf());
+
+			}
+
+		}
+
+	}
+	
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }

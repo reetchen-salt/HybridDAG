@@ -24,7 +24,7 @@ import entity.Node;
 public class PriorityGenerator {
 	
 	
-// WCET ´óµÄÓÅÏÈ¼¶´ó£¬
+// WCET ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¼ï¿½ï¿½ï¿½
 	
 	
 //	public void MyAssignment(DAG t){
@@ -89,7 +89,7 @@ public class PriorityGenerator {
 	public ArrayList<Node> GetOrder(ArrayList<Node> list ){
 		
 		
-//		System.out.print("µ÷ÕûÇ°\n");
+//		System.out.print("ï¿½ï¿½ï¿½ï¿½Ç°\n");
 //		
 //		
 //		for(Node A:list) {
@@ -177,10 +177,10 @@ public class PriorityGenerator {
 		
 		List<Node> tempdaglist = new ArrayList<Node>();
 		
-		//´¢´æ·Ö×éºóµÄdag½Úµã£¬2d
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½dagï¿½Úµã£¬2d
      	ArrayList<ArrayList<Node>> prioritylist = new ArrayList<ArrayList<Node>>();
 		
-     	// Õ¼Ê±µÄdagÁÐ±íÓÃÀ´É¾³ýµÄ
+     	// Õ¼Ê±ï¿½ï¿½dagï¿½Ð±ï¿½ï¿½ï¿½ï¿½ï¿½É¾ï¿½ï¿½ï¿½ï¿½
 		tempdaglist.addAll(t.DagList);  
 			
 		
@@ -189,12 +189,12 @@ public class PriorityGenerator {
 			
 			ArrayList<Node> plist = new ArrayList<Node>();	
 				
-				//±éÀú¹Ø¼üÂ·¾¶
+				//ï¿½ï¿½ï¿½ï¿½ï¿½Ø¼ï¿½Â·ï¿½ï¿½
 				for(Node k : t.Cpath.get(i).Ancestor) {
 					
 					for(int j = 0; j< tempdaglist.size();j++) {
 					
-					// ÌáÈ¡×é
+					// ï¿½ï¿½È¡ï¿½ï¿½
 					if(k.getIndex() == tempdaglist.get(j).getIndex()) {
 						
 						plist.add(k);
@@ -203,9 +203,11 @@ public class PriorityGenerator {
 					}}	}	
 				
 				
-					
-				plist = (ArrayList<Node>) plist.stream().sorted(Comparator.comparing(Node::getWeight).reversed().thenComparing(Comparator.comparing(Node::getWCET).reversed())).collect(Collectors.toList());	
-				
+				plist = (ArrayList<Node>) plist.stream()
+					    .sorted(Comparator
+					        .comparing(Node::getWeight).reversed()
+					        .thenComparing(node -> node.getWCET(false)).reversed())
+					    .collect(Collectors.toCollection(ArrayList::new));
 //				plist.sort((p1, p2) -> Long.compare(p1.getWCET(), p2.getWCET()));
 //				
 //				Collections.reverse(plist);
@@ -218,7 +220,7 @@ public class PriorityGenerator {
 		
 		}
 		
-		//×îºóÒ»¸ö½Úµã
+		//ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Úµï¿½
 		ArrayList<Node> plist2 = new ArrayList<Node>();
 		
 		plist2.add( t.DagList.get(t.DagList.size()-1));
@@ -275,10 +277,10 @@ public class PriorityGenerator {
 		
 		List<Node> tempdaglist = new ArrayList<Node>();
 		
-		//´¢´æ·Ö×éºóµÄdag½Úµã£¬2d
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½dagï¿½Úµã£¬2d
      	ArrayList<ArrayList<Node>> prioritylist = new ArrayList<ArrayList<Node>>();
 		
-     	// Õ¼Ê±µÄdagÁÐ±íÓÃÀ´É¾³ýµÄ
+     	// Õ¼Ê±ï¿½ï¿½dagï¿½Ð±ï¿½ï¿½ï¿½ï¿½ï¿½É¾ï¿½ï¿½ï¿½ï¿½
 		tempdaglist.addAll(t.DagList);  
 			
 		
@@ -287,12 +289,12 @@ public class PriorityGenerator {
 			
 			ArrayList<Node> plist = new ArrayList<Node>();	
 				
-				//±éÀú¹Ø¼üÂ·¾¶
+				//ï¿½ï¿½ï¿½ï¿½ï¿½Ø¼ï¿½Â·ï¿½ï¿½
 				for(Node k : t.Cpath.get(i).Ancestor) {
 					
 					for(int j = 0; j< tempdaglist.size();j++) {
 					
-					// ÌáÈ¡×é
+					// ï¿½ï¿½È¡ï¿½ï¿½
 					if(k.getIndex() == tempdaglist.get(j).getIndex()&&!t.Cpath.contains(k)) {
 						
 						plist.add(k);
@@ -302,8 +304,11 @@ public class PriorityGenerator {
 				
 				
 					
-				plist = (ArrayList<Node>) plist.stream().sorted(Comparator.comparing(Node::getWeight).reversed().thenComparing(Comparator.comparing(Node::getWCET).reversed())).collect(Collectors.toList());	
-				
+				plist = plist.stream()
+					    .sorted(Comparator
+					        .comparing(Node::getWeight).reversed()
+					        .thenComparing((Node node) -> node.getWCET(false)).reversed())
+					    .collect(Collectors.toCollection(ArrayList::new));
 				
 //				Collections.reverse(plist);
 //				prioritylist.add(plist);	
@@ -398,7 +403,7 @@ public class PriorityGenerator {
 		
 	
 		
-		t.DagList.sort((p1, p2) -> Long.compare(p1.getWCET(), p2.getWCET()));
+		t.DagList.sort((p1, p2) -> Long.compare(p1.getWCET(false), p2.getWCET(false)));
 		
 		Collections.reverse(t.DagList);
 		
@@ -419,7 +424,7 @@ public class PriorityGenerator {
 		
 	
 		
-		t.DagList.sort((p1, p2) -> Long.compare(p1.getWCET(), p2.getWCET()));
+		t.DagList.sort((p1, p2) -> Long.compare(p1.getWCET(false), p2.getWCET(false)));
 		
 		Collections.reverse(t.DagList);
 		
@@ -527,10 +532,10 @@ public class PriorityGenerator {
 		
 		List<Node> tempdaglist = new ArrayList<Node>();
 		
-		//´¢´æ·Ö×éºóµÄdag½Úµã£¬2d
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½dagï¿½Úµã£¬2d
 	 	ArrayList<ArrayList<Node>> prioritylist = new ArrayList<ArrayList<Node>>();
 		
-	 	// Õ¼Ê±µÄdagÁÐ±íÓÃÀ´É¾³ýµÄ
+	 	// Õ¼Ê±ï¿½ï¿½dagï¿½Ð±ï¿½ï¿½ï¿½ï¿½ï¿½É¾ï¿½ï¿½ï¿½ï¿½
 		tempdaglist.addAll(t.DagList);  
 			
 		
@@ -539,12 +544,12 @@ public class PriorityGenerator {
 			
 			ArrayList<Node> plist = new ArrayList<Node>();	
 				
-				//±éÀú¹Ø¼üÂ·¾¶
+				//ï¿½ï¿½ï¿½ï¿½ï¿½Ø¼ï¿½Â·ï¿½ï¿½
 				for(Node k : t.Cpath.get(i).Ancestor) {
 					
 					for(int j = 0; j< tempdaglist.size();j++) {
 					
-					// ÌáÈ¡×é
+					// ï¿½ï¿½È¡ï¿½ï¿½
 					if(k.getIndex() == tempdaglist.get(j).getIndex()) {
 						
 						plist.add(k);
@@ -580,7 +585,7 @@ public class PriorityGenerator {
 		
 		}
 		
-//		//×îºóÒ»¸ö½Úµã
+//		//ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Úµï¿½
 //		ArrayList<Node> plist2 = new ArrayList<Node>();
 //		
 //		plist2.add( t.DagList.get(t.DagList.size()-1));
@@ -764,7 +769,7 @@ public class PriorityGenerator {
 			
 			
 			
-			// µÚÒ»¸ö½ÚµãµÄºóÐø½Úµã£¬ÒÔ¼°ºóÃæµÄºóÐø½Úµã
+			// ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Úµï¿½Äºï¿½ï¿½ï¿½ï¿½Úµã£¬ï¿½Ô¼ï¿½ï¿½ï¿½ï¿½ï¿½Äºï¿½ï¿½ï¿½ï¿½Úµï¿½
 			while(!tempSuccessor.isEmpty()) {
 				
 				tempSuccessor.sort((p1, p2) -> Long.compare(p1.path, p2.path));
@@ -781,7 +786,7 @@ public class PriorityGenerator {
 				
 			
 				
-				//Èç¹ûÇ°ÖÃ½Úµã»¹Ã»ÇåÀíÍê
+				//ï¿½ï¿½ï¿½Ç°ï¿½Ã½Úµã»¹Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				if(!tempSuccessor.get(0).predecessor.isEmpty()) {
 
 								
@@ -792,7 +797,7 @@ public class PriorityGenerator {
 					
 					ArrayList<Node> templist = new ArrayList<Node>(); // ancestor list to assign priroity first
 					
-					//È·±£±»É¾µÄ²»±»¼Ó½øÀ´
+					//È·ï¿½ï¿½ï¿½ï¿½É¾ï¿½Ä²ï¿½ï¿½ï¿½ï¿½Ó½ï¿½ï¿½ï¿½
 					for(Node i :tempSuccessor.get(0).Ancestor) {
 					
 						if(DagList.contains(i)) {

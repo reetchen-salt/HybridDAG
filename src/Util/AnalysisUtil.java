@@ -169,7 +169,7 @@ public class AnalysisUtil {
         for(int i = 0; i< Dag1.size(); i++) {
 
         	
-        	Dag2.add(new Node(Dag1.get(i).getWCET(), Dag1.get(i).getIndex()));
+        	Dag2.add(new Node(Dag1.get(i).getWCET(false), Dag1.get(i).getIndex()));
         	
         	Dag2.get(i).setPriority(Dag1.get(i).getPriority());
         	
@@ -274,73 +274,73 @@ public class AnalysisUtil {
 	
 	
 	
-	
-	
-	public ArrayList<String> Stringmaker(DAG task){
-		
-		
-		
-		ArrayList<String> StringDAG = new ArrayList<String>() ;
-		
-		String G = "{";
-		String C = "{";
-		String P = "{";
-		
-		
-		
-		for(int i=0; i < task.DagList.size()-1; i++) {
-			
-			task.DagList.get(i).successor.sort((p1, p2) -> Integer.compare(p1.getIndex(), p2.getIndex()));
-			
-			  List<Integer> collect = task.DagList.get(i).successor.stream().map(x -> x.getIndex()).collect(Collectors.toList());
-			
-			G += task.DagList.get(i).getIndex()+":[" + collect.stream().map( String::valueOf) .collect(Collectors.joining(","))+"],";
-			
-			
-			
-			C += task.DagList.get(i).getIndex()+":"+task.DagList.get(i).getWCET()+",";
-			
-			P += task.DagList.get(i).getIndex()+":"+task.DagList.get(i).getPriority()+",";
-			
-			
-			
-		}
-		
-		task.DagList.get(task.DagList.size()-1).successor.sort((p1, p2) -> Integer.compare(p1.getIndex(), p2.getIndex()));
-		
-		  List<Integer> collect = task.DagList.get(task.DagList.size()-1).successor.stream().map(x -> x.getIndex()).collect(Collectors.toList());
-		
-		G += task.DagList.get(task.DagList.size()-1).getIndex()+":[" + collect.stream().map( String::valueOf) .collect(Collectors.joining(", "))+"]}";
-		
-		
-
-		C += task.DagList.get(task.DagList.size()-1).getIndex()+":"+task.DagList.get(task.DagList.size()-1).getWCET()+"}";
-		
-		
-		
-		P += task.DagList.get(task.DagList.size()-1).getIndex()+":"+task.DagList.get(task.DagList.size()-1).getPriority()+"}";
-		
-		
-		
-		
-		StringDAG.add(G);
-		StringDAG.add(C);
-		StringDAG.add(P);
-		
-
-		
-		
-		
-		return StringDAG;
-		
-		
-		
-		
-		
-		
-		
-		
-	}
+//	
+//	
+//	public ArrayList<String> Stringmaker(DAG task){
+//		
+//		
+//		
+//		ArrayList<String> StringDAG = new ArrayList<String>() ;
+//		
+//		String G = "{";
+//		String C = "{";
+//		String P = "{";
+//		
+//		
+//		
+//		for(int i=0; i < task.DagList.size()-1; i++) {
+//			
+//			task.DagList.get(i).successor.sort((p1, p2) -> Integer.compare(p1.getIndex(), p2.getIndex()));
+//			
+//			  List<Integer> collect = task.DagList.get(i).successor.stream().map(x -> x.getIndex()).collect(Collectors.toList());
+//			
+//			G += task.DagList.get(i).getIndex()+":[" + collect.stream().map( String::valueOf) .collect(Collectors.joining(","))+"],";
+//			
+//			
+//			
+//			C += task.DagList.get(i).getIndex()+":"+task.DagList.get(i).getWCET(false)+",";
+//			
+//			P += task.DagList.get(i).getIndex()+":"+task.DagList.get(i).getPriority()+",";
+//			
+//			
+//			
+//		}
+//		
+//		task.DagList.get(task.DagList.size()-1).successor.sort((p1, p2) -> Integer.compare(p1.getIndex(), p2.getIndex()));
+//		
+//		  List<Integer> collect = task.DagList.get(task.DagList.size()-1).successor.stream().map(x -> x.getIndex()).collect(Collectors.toList());
+//		
+//		G += task.DagList.get(task.DagList.size()-1).getIndex()+":[" + collect.stream().map( String::valueOf) .collect(Collectors.joining(", "))+"]}";
+//		
+//		
+//
+//		C += task.DagList.get(task.DagList.size()-1).getIndex()+":"+task.DagList.get(task.DagList.size()-1).getWCET(false)+"}";
+//		
+//		
+//		
+//		P += task.DagList.get(task.DagList.size()-1).getIndex()+":"+task.DagList.get(task.DagList.size()-1).getPriority()+"}";
+//		
+//		
+//		
+//		
+//		StringDAG.add(G);
+//		StringDAG.add(C);
+//		StringDAG.add(P);
+//		
+//
+//		
+//		
+//		
+//		return StringDAG;
+//		
+//		
+//		
+//		
+//		
+//		
+//		
+//		
+//	}
 	
 	
 	public void findPath(ArrayList<Node> DagList){
@@ -398,7 +398,7 @@ public class AnalysisUtil {
 	    	
 	    	Collections.reverse(DagList.get(i).grouppre);
 	    	
-	    	DagList.get(i).groupfront = DagList.get(i).getWCET()+ ( DagList.get(i).grouppre.isEmpty()? 0:  DagList.get(i).grouppre.get(0).groupfront);
+	    	DagList.get(i).groupfront = DagList.get(i).getWCET(false)+ ( DagList.get(i).grouppre.isEmpty()? 0:  DagList.get(i).grouppre.get(0).groupfront);
 	    	
 	    	
 	    	
@@ -423,7 +423,7 @@ public class AnalysisUtil {
 	    	
 	    	Collections.reverse(DagList.get(i).groupsuc);
 	    	
-	    	DagList.get(i).groupback = DagList.get(i).getWCET()+(DagList.get(i).groupsuc.isEmpty()? 0:DagList.get(i).groupsuc.get(0).groupback);
+	    	DagList.get(i).groupback = DagList.get(i).getWCET(false)+(DagList.get(i).groupsuc.isEmpty()? 0:DagList.get(i).groupsuc.get(0).groupback);
 	    	
 	    	
 	    	
@@ -440,7 +440,7 @@ public class AnalysisUtil {
 	    for(int i = 0; i<  DagList.size();i++) {
 	    	
 	    	
-	    	DagList.get(i).grouppath = DagList.get(i).groupback+ DagList.get(i).groupfront-DagList.get(i).getWCET();
+	    	DagList.get(i).grouppath = DagList.get(i).groupback+ DagList.get(i).groupfront-DagList.get(i).getWCET(false);
 	    	
 	    	
 	    	
@@ -480,7 +480,8 @@ public class AnalysisUtil {
 		list.removeAll(remove);
 		
 		
-		
+		// create a 2 d list contains a series of nodes lists 
+		// all the node lists contains nodes that can be parallel to each other
 		
 		ArrayList<ArrayList<Node>> twoDList = new ArrayList<ArrayList<Node>>();
 
@@ -505,20 +506,29 @@ public class AnalysisUtil {
 
 		}
 
+		// sort the list in decreasing order of the size
 		twoDList.sort((l1, l2) -> l2.size() - l1.size());
+		
+		// sort the sublist with priority from high to low
 
 		twoDList.forEach(list2 -> Collections.sort(list2, Comparator.comparingInt(Node::getPriority)));
 
 		boolean interference = false;
+		
+		
+		// we need certain number of nodes, and at least one high-priority node to form the path
 
 		for (ArrayList<Node> thelist : twoDList) {
+			
 			
 			if (thelist.size() > number && thelist.get(0).getPriority() <= theOne.getPriority()) {
 					
 				ArrayList<Node> newParallel = new ArrayList<Node>(thelist);
+				
+				// further remove the scenario, when remove the nodes that starts earlier
 				for(Node node1: thelist ) {		
 					
-					if(node1.getStart()<theOne.getStart()){
+					if(node1.getStart(false)<theOne.getStart(false)){
 						
 						newParallel.remove(node1);						
 						
@@ -683,7 +693,7 @@ public class AnalysisUtil {
         System.out.print("{");
         for(int i =0; i< task.DagList.size();i++) {
         	
-        	 System.out.print(task.DagList.get(i).getWCET()+ ", ");
+        	 System.out.print(task.DagList.get(i).getWCET(false)+ ", ");
         }
         
         
@@ -909,7 +919,7 @@ public class AnalysisUtil {
 		for(Node inter: Interference) {
 			
 			
-			interference +=  inter.getTempf()==0? inter.getWCET(): Math.min( inter.getTempf()-point, inter.getWCET());
+			interference +=  inter.getTempf()==0? inter.getWCET(false): Math.min( inter.getTempf()-point, inter.getWCET(false));
 			
 			
 		}
@@ -929,7 +939,7 @@ public class AnalysisUtil {
 		for(Node inter: Interference) {
 			
 			
-			interference +=  inter.getWCET();
+			interference +=  inter.getWCET(false);
 			
 			
 		}
@@ -948,11 +958,11 @@ public class AnalysisUtil {
 
 			if (inter.getTempf() == -1) {
 
-				interference += inter.getWCET();
+				interference += inter.getWCET(false);
 
 			} else {
 
-				interference += Math.min(inter.getTempf() - point, inter.getWCET());
+				interference += Math.min(inter.getTempf() - point, inter.getWCET(false));
 			}
 
 		}
@@ -980,7 +990,7 @@ public class AnalysisUtil {
 
 		}
 		
-		lowlist.sort((p1, p2) -> Long.compare(p1.getWCET(), p2.getWCET()));
+		lowlist.sort((p1, p2) -> Long.compare(p1.getWCET(false), p2.getWCET(false)));
 		
 		Collections.reverse(lowlist);
 		
@@ -1028,7 +1038,7 @@ public class AnalysisUtil {
 
 		for (Node a: list) {
 
-			sum += a.getWCET();
+			sum += a.getWCET(false);
 
 		}
 

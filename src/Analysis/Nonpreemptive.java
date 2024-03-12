@@ -57,7 +57,7 @@ public class Nonpreemptive {
 		// ��ʼ����ÿһ���ڵ��������ʱ��
 		for (Node theNode : t.DagList) {
 			// ���ȼ����Լ���WCET
-			long WCfinish = theNode.getWCET();
+			long WCfinish = theNode.getWCET(false);
 
 			ArrayList<Node> realcon = new ArrayList<Node>();
 			// ����ڲ��нڵ�concurrent ��ȥ�� I_remove
@@ -102,10 +102,17 @@ public class Nonpreemptive {
 					// ��ȥ�����Ƚڵ㣬 ʣ�¶��ǵ����ȼ�������ȡm-1�����ĵ����ȼ�
 					potential.removeAll(Interference);
 
-					// ʣ�µĽڵ㰴WCET����
-					potential = (ArrayList<Node>) potential.stream().sorted(Comparator.comparing(Node::getWCET)
-							.reversed().thenComparing(Comparator.comparing(Node::getIndex)))
-							.collect(Collectors.toList());
+					potential = potential.stream()
+						    .sorted(Comparator.comparing((Node node) -> node.getWCET(false))
+						            .reversed()
+						            .thenComparing(Node::getIndex))
+						    .collect(Collectors.toCollection(ArrayList::new));
+					
+					
+					
+					
+					
+					
 
 					int num = Math.min(m - 1, potential.size());
 
