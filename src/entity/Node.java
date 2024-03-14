@@ -142,7 +142,7 @@ public class Node {
 	public long getWCET(boolean isEarlier) {
 	    // Assuming WCET is a variable of a numeric type defined elsewhere in your class
 		if(isEarlier)
-			return (long)(0.5*WCET);
+			return (long)(0.8*WCET);
 		else 
 			return WCET;
 			
@@ -171,6 +171,40 @@ public class Node {
 		}
 
 	}
+	
+	
+	public long getLP() {
+
+		if (predecessor.isEmpty()) {
+
+			return 0;
+
+		} else {
+
+			predecessor.sort((p1, p2) -> Long.compare(p1.getLateT(), p2.getLateT()));
+			Collections.reverse(predecessor);
+
+			return predecessor.get(0).getLateT();
+
+		}
+
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 	public Node getP() {
 

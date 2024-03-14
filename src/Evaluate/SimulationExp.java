@@ -139,6 +139,9 @@ public class SimulationExp {
 			
 			makespan2 = new Analysis.Nonpreemptive().WCmakespan(tasks.get(0), core);
 			
+			
+			makespan1 = new Makespan().getMakespan(tasks.get(0).DagList, core,true);
+			
 			makespan1 = new Makespan().getMakespan(tasks.get(0).DagList, core,false);
 			
 	

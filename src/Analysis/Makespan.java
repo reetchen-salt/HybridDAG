@@ -15,8 +15,6 @@ public class Makespan {
 	public long getMakespan(ArrayList<Node> tdag, int Ncore, boolean isEarly) {
 		
 
-		
-		
 
 		for (Node A : tdag) {
 
@@ -46,7 +44,9 @@ public class Makespan {
 			CoreList.sort((p1, p2) -> Long.compare(p1.getLoad(), p2.getLoad()));
 
 			ArrayList<Node> readytask = new ArrayList<Node>();
+			
 			for (int i = 0; i < tempdag.size(); i++) {
+				
 				if (tempdag.get(i).getState() == true) {
 
 					readytask.add(tempdag.get(i));
@@ -54,7 +54,50 @@ public class Makespan {
 				}
 
 			}
-
+			
+	// debug		
+//			if(readytask.size() == 0) {
+//				
+//				System.out.print("\n the size of whole DAG is" + tdag.size());
+//			
+//				System.out.print("\nthe size of DAG is" + tempdag.size());
+//				
+//				System.err.print("\something wrong");
+//				
+//				for (int i = 0; i < tempdag.size(); i++) {
+//					
+//					if (tempdag.get(i).getState() == false) {
+//
+//						if (tempdag.get(i).predecessor.isEmpty()) {
+//
+//							System.out.print("\n the predecessor empty" + tempdag.get(i).getIndex());
+//
+//						} else {
+//							
+//							
+//							for(Node thenode:tempdag.get(i).predecessor) {
+//								
+//								
+//								System.out.print("\n the predecessor of  " +tempdag.get(i).getIndex()+ "is : " + thenode.getIndex());
+//
+//								
+//							}
+//							
+//							
+//
+//							tempdag.get(i).predecessor.sort((p1, p2) -> Long.compare(p1.getTempf(), p2.getTempf()));
+//
+//							System.out.print("\n the predecessor tempf is " + tempdag.get(i).predecessor.get(0).getTempf());
+//
+//						}
+//
+//					}
+//
+//				}
+//				
+//
+//				
+//			}
 			readytask.sort((p1, p2) -> Integer.compare(p1.getPriority(), p2.getPriority()));
 
 			for (int i = 0; i < readytask.size(); i++) {

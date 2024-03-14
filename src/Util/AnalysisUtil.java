@@ -469,11 +469,17 @@ public class AnalysisUtil {
 		
 		for(Node node1: list) {
 			
-			if(node1.predecessor.containsAll(theOne.predecessor)) {
+			if(node1.predecessor.containsAll(theOne.predecessor)  ) {
 				
 				remove.addAll(node1.Descendant);
 				
 			}
+			
+//			if(node1.getStart(true)> theOne.getStart(false)) {
+//				
+//				remove.add(node1);
+//			}
+//			
 			
 		}
 		
