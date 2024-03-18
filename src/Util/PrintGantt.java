@@ -85,13 +85,13 @@ public class PrintGantt extends JFrame {
             }
         }
         
-        g.drawLine(startX, timelineY, startX + (int)(maxFinishTime * value / makespan), timelineY);
+//        g.drawLine(startX, timelineY, startX + (int)(maxFinishTime * value / makespan), timelineY);
         int maxLabelHeight = 0; // To capture the maximum height of the time unit labels
         // Draw time units along the timeline
         for (int i = 0; i <= maxFinishTime; i++) {
             int timeUnitX = startX + (int)(i * value / makespan);
             // Draw small tick marks for each time unit
-            g.drawLine(timeUnitX, timelineY, timeUnitX, timelineY + 5);
+//            g.drawLine(timeUnitX, timelineY, timeUnitX, timelineY + 5);
 
             // Draw the time unit label for every time unit or at specific intervals for clarity
             String label = String.valueOf(i);
@@ -99,7 +99,7 @@ public class PrintGantt extends JFrame {
             int labelWidth = metrics.stringWidth(label);
             int labelHeight = metrics.getHeight();
             maxLabelHeight = Math.max(maxLabelHeight, labelHeight);
-            g.drawString(label, timeUnitX - labelWidth / 2, timelineY + 20);
+//            g.drawString(label, timeUnitX - labelWidth / 2, timelineY + 20);
         }
 
         // Calculate the starting Y position for the detailed information, considering the timeline and its labels

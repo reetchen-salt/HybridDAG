@@ -211,9 +211,9 @@ public class DAG {
 
 //		System.out.print(" total WCET list is " + TotalWCET+ "\n" );
 
-	      TotalWCET =50;
+//	      TotalWCET =100;
 
-		Random rand = new Random();
+//		Random rand = new Random();
 
 		ArrayList<Long> timelist = new ArrayList<Long>();
 

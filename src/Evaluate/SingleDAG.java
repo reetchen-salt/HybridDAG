@@ -19,6 +19,7 @@ import Util.AnalysisUtil;
 import Analysis.Nonpreemptive;
 import Analysis.AnomalyAnalysis;
 import Analysis.Makespan;
+import entity.Core;
 import entity.DAG;
 
 public class SingleDAG {
@@ -46,7 +47,7 @@ public class SingleDAG {
 
 		double[] ratio = { 0.2 };
 
-		int times = 1;       
+		int times = 1000;       
 
 		SingleDAG ep = new SingleDAG();
 
@@ -86,7 +87,7 @@ public class SingleDAG {
 
 		long makespan1 = 0;
 
-
+		long makespan2 = 0;
 
 		int anomalyDetected =0;
 		
@@ -101,25 +102,43 @@ public class SingleDAG {
 
 			new PriorityGenerator().MyAssignment(tasks.get(0));
 	
-
-			makespan1 = new Makespan().getMakespan(tasks.get(0).DagList, core,true);
+//
+//			makespan1 = new Makespan().getMakespan(tasks.get(0).DagList, core,true);
 			
 
-		    new Util.DrawDag(tasks.get(0), tasks.get(0).DagList);
-			
+			makespan1 = new AnalysisUtil()
+					.getMakespan(new Makespan().getMakespan(tasks.get(0).DagList, core, false));
 
-			makespan1 = new Makespan().getMakespan(tasks.get(0).DagList, core,false);
-			
+//			
+			if (new AnomalyAnalysis().AnalyzeAnomaly(tasks.get(0).DagList, core)) {
 
-		    
-		    if(new AnomalyAnalysis().AnalyzeAnomaly(tasks.get(0).DagList, core)) {
-		    	
-		    	anomalyDetected++;
-		    	
-		    }
-			
-	
-			
+				for (int j = 0; j < 10000; j++) {
+
+					ArrayList<Core> corelist = new Makespan().getMakespan(tasks.get(0).DagList, core, true);
+
+					makespan2 = new AnalysisUtil().getMakespan(corelist);
+
+					if (makespan2 > makespan1) {
+
+						new Util.DrawDag(tasks.get(0), tasks.get(0).DagList);
+
+						new Util.PrintGantt(new Makespan().getMakespan(tasks.get(0).DagList, core, false), makespan1,
+								false);
+
+						new Util.PrintGantt(corelist, makespan2, true);
+						
+				        try {
+				            Thread.sleep(10000000); // Pause for 1000 milliseconds or 1 second
+				            // Continue with the loop after the pause
+				        } catch (InterruptedException e) {
+				            Thread.currentThread().interrupt(); // handle interrupted exception
+				        }
+
+					}
+
+				}
+
+			}
 
 		}
 		

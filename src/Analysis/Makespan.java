@@ -12,13 +12,15 @@ public class Makespan {
 
 	long makespan = 0;
 
-	public long getMakespan(ArrayList<Node> tdag, int Ncore, boolean isEarly) {
+	public ArrayList<Core> getMakespan(ArrayList<Node> tdag, int Ncore, boolean isEarly) {
 		
 
 
 		for (Node A : tdag) {
 
 			A.selfclean();
+			if(isEarly==true) {
+				A.setNewWCET();}
 
 		}
 
@@ -142,9 +144,9 @@ public class Makespan {
 		
 		storeData(isEarly,tdag);
 		
-		new Util.PrintGantt(CoreList, makespan, isEarly);
+//		new Util.PrintGantt(CoreList, makespan, isEarly);
 
-		return makespan;
+		return CoreList;
 
 	}
 	

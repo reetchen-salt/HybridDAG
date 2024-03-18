@@ -137,12 +137,18 @@ public class SimulationExp {
 			new PriorityGenerator().MyAssignment(tasks.get(0));
 	
 			
-			makespan2 = new Analysis.Nonpreemptive().WCmakespan(tasks.get(0), core);
+//			makespan2 = new Analysis.Nonpreemptive().WCmakespan(tasks.get(0), core);
 			
 			
-			makespan1 = new Makespan().getMakespan(tasks.get(0).DagList, core,true);
 			
-			makespan1 = new Makespan().getMakespan(tasks.get(0).DagList, core,false);
+			
+			
+			makespan1 = new AnalysisUtil().getMakespan(new Makespan().getMakespan(tasks.get(0).DagList, core,false));
+			
+			
+	
+			
+			
 			
 	
 			
@@ -155,19 +161,25 @@ public class SimulationExp {
 
 		    if(new AnomalyAnalysis().AnalyzeAnomaly(tasks.get(0).DagList, core)) {
 		    	
-		    	anomalyDetected++;
+		    	for(int j = 0; j < 10000; j++) {
+		    	
+		    		makespan2 =  new AnalysisUtil().getMakespan(new Makespan().getMakespan(tasks.get(0).DagList, core,false));
+				
+					if(makespan1 < makespan2) {
+					
+					
+						tighterP += (makespan2-makespan1)/(double)makespan2;
+						
+						tighter++;
+					
+					
+					
+					}
+				
+		    	}
 		    	
 		    }
-			if(makespan1 < makespan2) {
-				
-				
-				tighterP += (makespan2-makespan1)/(double)makespan2;
-				
-				tighter++;
-				
-				
-				
-			}
+
 			
 		
 			if(makespan2 < makespan1) {

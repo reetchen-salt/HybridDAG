@@ -36,6 +36,9 @@ public class Node {
 	public boolean anomaly = false;
 
 	private long WCET;
+	
+	private long newWCET;
+	private long start;
 	private int index;
 
 	private long weight;
@@ -141,12 +144,25 @@ public class Node {
 
 	public long getWCET(boolean isEarlier) {
 	    // Assuming WCET is a variable of a numeric type defined elsewhere in your class
-		if(isEarlier)
-			return (long)(0.8*WCET);
+		if(isEarlier) 
+	    	return getNewWCET();
 		else 
 			return WCET;
 			
 
+	}
+	
+	public void setNewWCET() {
+		
+		double scaleFactor = 0.5 * Math.random() + 0.5;
+    	
+
+		this.newWCET = (long)(scaleFactor * WCET);
+	}
+	
+	public long getNewWCET() {
+		
+		return newWCET;
 	}
 
 
@@ -192,17 +208,9 @@ public class Node {
 	
 	
 	
+
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	
 	
 
@@ -304,12 +312,26 @@ public class Node {
 
 	public long getStart(boolean isEarly) {
 		
-		if(isEarly) 
-			return getEarlyT() - getWCET(isEarly);
-		else
-			return getLateT()-getWCET(isEarly);
+		if(isEarly==true) {
+			
+			return getEarlyT()-getWCET(true);
+		}else {
+			
+			
+			return getLateT()-getWCET(false);
+		}
+
+		
 
 	}
+	
+	
+
+	
+	
+	
+	
+	
 	
     // Getter for earlyT
     public long getEarlyT() {
@@ -319,6 +341,7 @@ public class Node {
     // Setter for earlyT
     public void setEarlyT(long earlyT) {
         this.earlyT = earlyT;
+       
     }
 
     // Getter for lateT
