@@ -21,13 +21,14 @@ import entity.DAG;
 
 public class SimulationExp {
 
-	public static int MAX_PERIOD = 2000;
+	public static int MAX_PERIOD = 3000;
 	public static int MIN_PERIOD = 1000;
 
 	public static int SEED = 1000;
 	static PrintWriter writer = null;
 	static PrintWriter writer2 = null;
 	int count = 0;
+	static String filePath = "your_data.csv";
 
 	public synchronized void countDown(CountDownLatch cd) {
 		cd.countDown();
@@ -35,6 +36,24 @@ public class SimulationExp {
 	}
 
 	public static void main(String args[]) throws Exception {
+		
+		
+	
+		
+		
+        try (FileWriter fileWriter = new FileWriter(filePath);
+	             PrintWriter printWriter = new PrintWriter(fileWriter)) {
+	            
+	            // Writing the header row
+	            printWriter.println("AvgCfactor,WorkloadPercentage, CurrentWorkload,MinWorkload,MaxWorkload,TempMakespan,WCmakespan,NumNodes,AvgInDegree,AvgOutDegree,CoreNum, isLonger");
+	            
+
+
+	        } catch (IOException e) {
+	            System.err.println("An error occurred while writing the file.");
+	            e.printStackTrace();
+	        }
+			
 
 		int[] Core = { 3,4,6,7,8,9 };
 
@@ -139,8 +158,9 @@ public class SimulationExp {
 			
 //			makespan2 = new Analysis.Nonpreemptive().WCmakespan(tasks.get(0), core);
 			
-			
-			
+	     
+
+	
 			
 			
 			makespan1 = new AnalysisUtil().getMakespan(new Makespan().getMakespan(tasks.get(0).DagList, core,false));
