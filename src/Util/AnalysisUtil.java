@@ -346,6 +346,50 @@ public class AnalysisUtil {
 		
 		
 	}
+	
+	public ArrayList<ArrayList<Node>> GetParaList(ArrayList<Node> list){
+		
+		
+		ArrayList<ArrayList<Node>> twoDList = new ArrayList<ArrayList<Node>>();
+
+		
+		for (Node node1 : list) {
+
+			ArrayList<Node> conList = new ArrayList<Node>();
+			conList.add(node1);
+			twoDList.add(conList);
+		}
+
+		for (Node node1 : list) {
+
+			for (ArrayList<Node> thelist : twoDList) {
+
+				if (node1.concurrent.containsAll(thelist)) {
+
+					thelist.add(node1);
+
+				}
+
+			}
+
+		}
+
+		// sort the list in decreasing order of the size
+		twoDList.sort((l1, l2) -> l2.size() - l1.size());
+
+		// sort the sublist with priority from high to low
+
+		twoDList.forEach(list2 -> Collections.sort(list2, Comparator.comparingInt(Node::getPriority)));
+		
+		
+		
+		return twoDList;
+		
+		
+	}
+	
+	
+	
 
 	public boolean getPath(ArrayList<Node> list, Node theOne, int number) {
 
@@ -375,35 +419,9 @@ public class AnalysisUtil {
 		// create a 2 d list contains a series of nodes lists
 		// all the node lists contains nodes that can be parallel to each other
 
-		ArrayList<ArrayList<Node>> twoDList = new ArrayList<ArrayList<Node>>();
+		ArrayList<ArrayList<Node>> twoDList = GetParaList( list);
 
-		for (Node node1 : list) {
 
-			ArrayList<Node> conList = new ArrayList<Node>();
-			conList.add(node1);
-			twoDList.add(conList);
-		}
-
-		for (Node node1 : list) {
-
-			for (ArrayList<Node> thelist : twoDList) {
-
-				if (node1.concurrent.containsAll(thelist)) {
-
-					thelist.add(node1);
-
-				}
-
-			}
-
-		}
-
-		// sort the list in decreasing order of the size
-		twoDList.sort((l1, l2) -> l2.size() - l1.size());
-
-		// sort the sublist with priority from high to low
-
-		twoDList.forEach(list2 -> Collections.sort(list2, Comparator.comparingInt(Node::getPriority)));
 
 		boolean interference = false;
 
@@ -439,6 +457,27 @@ public class AnalysisUtil {
 		return interference;
 
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 	public int numPath(ArrayList<Node> list, Node theOne, int number) {
 
@@ -685,6 +724,27 @@ public class AnalysisUtil {
 		return middle;
 
 	}
+	
+	
+	public double findMedianWCET(ArrayList<Node> nodes) {
+		
+		List<Long> wcetValues = new ArrayList<>();
+		
+		for (Node node : nodes) {
+			wcetValues.add(node.getWCET(false));
+		}
+
+		Collections.sort(wcetValues);
+
+		int n = wcetValues.size();
+		if (n % 2 != 0) {
+			// If odd, return the middle element directly.
+			return wcetValues.get(n / 2);
+		}
+		// If even, calculate the average of the two middle elements.
+		// Note: We're casting to double to ensure we get a decimal result if needed.
+		return (wcetValues.get((n - 1) / 2) + wcetValues.get(n / 2)) / 2.0;
+	}
 
 	public boolean isSchedulable(ArrayList<DAG> tasks) {
 
@@ -818,5 +878,42 @@ public class AnalysisUtil {
 
 		return sum;
 	}
+	
+	
+	public long getWorkload(ArrayList<Node> list, boolean isEarly) {
+
+		long theWorkload = 0;
+
+		for (Node theNode : list) {
+
+			if (isEarly) {
+
+				theWorkload += theNode.getWCET(true);
+
+			} else {
+
+				theWorkload += theNode.getWCET(false);
+
+			}
+
+		}
+
+		return theWorkload;
+
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }

@@ -128,49 +128,74 @@ public class SimulationExp {
 	}
 
 //-------------------start the system, return RTA of MSRP and MrsP
-	public void PriorityOrder(int core, int parallelism, int critical_path, int TOTAL_NUMBER_OF_SYSTEMS, String name,
+	public void PriorityOrder(int core, int parallelism, int critical_path, int TOTAL_NUMBER_OF_DAGs, String name,
 			double ratio) {
 
 		// -----
 		SimpleSystemGenerator generator = new SimpleSystemGenerator(MIN_PERIOD, MAX_PERIOD, 1, true, SEED, parallelism,
 				critical_path, ratio);
 
-		long makespan1 = 0;
-		long makespan2 = 0;
+		long MaxMakespan = 0;
+		long MinMakespan = 0;
+		long MinWorkload = 0;
+		long MaxWordload = 0;
+		long MaxWCET = 0;
+		long MinWCET = 0;
+		double MedianWCET =0;
+		int NumNodes = 0;
+		int MaxParallel = 0;
+		int CriticalPath = 0;
+		int AvgInDegree = 0;
+		int AvgOutDegree = 0;
+		int CoreNum = 0;
+		int IsAnomaly =0;
 		
-		int anomalyDetected =0;
-		double tighter =0;
-		
-		double tighterP= 0;
+//		
+//		
+//		double tighter =0;
+//		
+//		double tighterP= 0;
 
 		
-
-		for (int i = 0; i < TOTAL_NUMBER_OF_SYSTEMS; i++) {
+		for (int i = 0; i < TOTAL_NUMBER_OF_DAGs; i++) {
 
 			ArrayList<DAG> tasks = generator.generateTasks();
 
 			tasks.get(0).setPriority(0);
 
-
-
 			new PriorityGenerator().MyAssignment(tasks.get(0));
+			
+			
 	
 			
 //			makespan2 = new Analysis.Nonpreemptive().WCmakespan(tasks.get(0), core);
 			
-	     
-
+			
+			
+			MaxMakespan = new AnalysisUtil().getMakespan(new Makespan().getMakespan(tasks.get(0).DagList, core,false));
+			
+			MinMakespan = new AnalysisUtil().getMakespan(new Makespan().getMakespan(tasks.get(0).DagList, core,true));
 	
+			MinWorkload = new AnalysisUtil().getWorkload(tasks.get(0).DagList, true);
+			
+			MaxWordload = new AnalysisUtil().getWorkload(tasks.get(0).DagList, false);
+			
+			tasks.get(0).DagList.sort((p1, p2) -> Long.compare(p1.getWCET(false), p2.getWCET(false)));
+			
+			MinWCET = tasks.get(0).DagList.get(0).getWCET(false);
 			
 			
-			makespan1 = new AnalysisUtil().getMakespan(new Makespan().getMakespan(tasks.get(0).DagList, core,false));
+			MaxWCET = tasks.get(0).DagList.get(tasks.get(0).DagList.size()-1).getWCET(false);
+			
+			MedianWCET =  new AnalysisUtil().findMedianWCET(tasks.get(0).DagList) ;
+			 
+			NumNodes = tasks.get(0).DagList.size();
 			
 			
-	
 			
 			
 			
-	
+			
 			
 //			System.out.print("the bound is" + makespan2);
 //	
