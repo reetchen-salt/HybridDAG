@@ -347,6 +347,45 @@ public class AnalysisUtil {
 		
 	}
 	
+	
+	
+	public long getAvgInDegree(ArrayList<Node> list) {
+
+		long average = 0;
+
+		for (Node node : list) {
+
+			average += node.predecessor.size();
+
+		}
+
+		average = average / list.size();
+
+		return average;
+	}
+	
+	
+	
+	public long getAvgOutDegree(ArrayList<Node> list) {
+
+		long average = 0;
+
+		for (Node node : list) {
+
+			average += node.successor.size();
+
+		}
+
+		average = average / list.size();
+
+		return average;
+	}
+	
+	
+	
+	
+	
+	
 	public ArrayList<ArrayList<Node>> GetParaList(ArrayList<Node> list){
 		
 		
