@@ -155,7 +155,7 @@ public class AnomalyAnalysis {
 		ArrayList<Node> interference = new ArrayList<Node>();
 		for (Node DelayNode : realcon) {
 
-			if (DelayNode.getnewf(false) <= theNode.getStart(false)) {
+			if (DelayNode.getNewf("max") <= theNode.getStart("max")) {
 
 				interference.add(DelayNode);
 

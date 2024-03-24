@@ -8,11 +8,11 @@ import java.util.ArrayList;
 
 public class PrintGantt extends JFrame {
 	
-	boolean isEarly ;
+	String isEarly ;
     long makespan;
     ArrayList<Core> CoreList = new ArrayList<>();
 
-    public PrintGantt(ArrayList<Core> CoreList, long makespan, boolean isEarly) {
+    public PrintGantt(ArrayList<Core> CoreList, long makespan, String isEarly) {
     	
     	
     
@@ -124,6 +124,7 @@ public class PrintGantt extends JFrame {
         int textX = x + (width - fm.stringWidth(text)) / 2;
         int textY = y + ((height - fm.getHeight()) / 2) + fm.getAscent() - 2;
         g.drawString(text, textX, textY);
+        
     }
 
     private void drawDetails(Graphics g, int startX, int startY) {
@@ -140,7 +141,7 @@ public class PrintGantt extends JFrame {
                 String details = "id:" + node.getIndex() +
                                  ", start:" + node.getStart(isEarly) +
                                  ", WCET:" + node.getWCET(isEarly) +
-                                 ", Tempf:" + node.getnewf(isEarly);
+                                 ", Tempf:" + node.getNewf(isEarly);
                 g.drawString(details, startX, y);
                 y += lineHeight + 5; // Add space between lines
             }

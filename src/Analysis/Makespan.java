@@ -12,14 +12,14 @@ public class Makespan {
 
 	long makespan = 0;
 
-	public ArrayList<Core> getMakespan(ArrayList<Node> tdag, int Ncore, boolean isEarly) {
+	public ArrayList<Core> getMakespan(ArrayList<Node> tdag, int Ncore, String isEarly) {
 		
 
 
 		for (Node A : tdag) {
 
 			A.selfclean();
-			if(isEarly==true) {
+			if(isEarly=="random") {
 				A.setNewWCET();}
 
 		}
@@ -150,23 +150,13 @@ public class Makespan {
 
 	}
 	
-	private void storeData(boolean isEarly, ArrayList<Node> dagList) {
+	private void storeData(String isEarly, ArrayList<Node> dagList) {
 
-		if (isEarly) {
+		for (Node theNode : dagList) {
+			
+			
+		 	  theNode.setNewf(theNode.getTempf(), isEarly);
 
-			for (Node theNode : dagList) {
-
-				theNode.setEarlyT(theNode.getTempf());
-
-			}
-
-		} else {
-
-			for (Node theNode : dagList) {
-
-				theNode.setLateT(theNode.getTempf());
-
-			}
 
 		}
 

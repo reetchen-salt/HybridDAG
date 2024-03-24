@@ -17,6 +17,7 @@ import Util.AnalysisUtil;
 
 import Analysis.AnomalyAnalysis;
 import Analysis.Makespan;
+import entity.Core;
 import entity.DAG;
 
 public class SimulationExp {
@@ -28,7 +29,7 @@ public class SimulationExp {
 	static PrintWriter writer = null;
 	static PrintWriter writer2 = null;
 	int count = 0;
-	static String filePath = "your_data.csv";
+	static String filePath = "data/your_data.txt";
 
 	public synchronized void countDown(CountDownLatch cd) {
 		cd.countDown();
@@ -54,15 +55,23 @@ public class SimulationExp {
 	        }
 			
 
-		int[] Core = { 3,4,6,7,8,9 };
+//		int[] Core = { 3,4,6,7,8,9 };
+//
+//		int[] Par = { 4,5,6,7,8,9,10 };
+//
+//		int[] Cri = { 4,5,6,7,8,9,10 };
+//		
+		
 
-		int[] Par = { 4,5,6,7,8,9,10 };
+		int[] Core = { 3};
 
-		int[] Cri = { 4,5,6,7,8,9,10 };
+		int[] Par = { 4 };
+
+		int[] Cri = { 4 };
 
 		double[] ratio = { 0.2 };
 
-		int times = 1000;
+		int times = 1;
 
 		SimulationExp ep = new SimulationExp();
 
@@ -88,40 +97,40 @@ public class SimulationExp {
 
 		ad.await();
 
-		for (int t = 0; t < Par.length; t++) {
-			
-			final int not=t;
-
-			new Thread(new Runnable() {
-				@Override
-				public void run() {
-				
-					ep.PriorityOrder(Core[0], Par[not], Cri[0], times,"NoPar", ratio[0]);
-					
-					ep.countDown(bd);
-				}
-			}).start();
-			
-		}
-		bd.await();
-		
-
-		for (int a = 0; a < Cri.length; a++) {
-			
-			final int noa=a;
-
-			new Thread(new Runnable() {
-				@Override
-				public void run() {
-					ep.PriorityOrder(Core[0], Par[0], Cri[noa], times,"NoCri", ratio[0]);
-					
-					ep.countDown(cd);
-
-				}
-			}).start();
-			
-		}
-		cd.await();
+//		for (int t = 0; t < Par.length; t++) {
+//			
+//			final int not=t;
+//
+//			new Thread(new Runnable() {
+//				@Override
+//				public void run() {
+//				
+//					ep.PriorityOrder(Core[0], Par[not], Cri[0], times,"NoPar", ratio[0]);
+//					
+//					ep.countDown(bd);
+//				}
+//			}).start();
+//			
+//		}
+//		bd.await();
+//		
+//
+//		for (int a = 0; a < Cri.length; a++) {
+//			
+//			final int noa=a;
+//
+//			new Thread(new Runnable() {
+//				@Override
+//				public void run() {
+//					ep.PriorityOrder(Core[0], Par[0], Cri[noa], times,"NoCri", ratio[0]);
+//					
+//					ep.countDown(cd);
+//
+//				}
+//			}).start();
+//			
+//		}
+//		cd.await();
 //		
 
 	}
@@ -176,20 +185,20 @@ public class SimulationExp {
 			
 			
 			
-			MaxMakespan = new AnalysisUtil().getMakespan(new Makespan().getMakespan(tasks.get(0).DagList, core,false));
+			MaxMakespan = new AnalysisUtil().getMakespan(new Makespan().getMakespan(tasks.get(0).DagList, core,"max"));
 			
-			MinMakespan = new AnalysisUtil().getMakespan(new Makespan().getMakespan(tasks.get(0).DagList, core,true));
+			MinMakespan = new AnalysisUtil().getMakespan(new Makespan().getMakespan(tasks.get(0).DagList, core,"min"));
 	
-			MinWorkload = new AnalysisUtil().getWorkload(tasks.get(0).DagList, true);
+			MinWorkload = new AnalysisUtil().getWorkload(tasks.get(0).DagList, "min");
 			
-			MaxWorkload = new AnalysisUtil().getWorkload(tasks.get(0).DagList, false);
+			MaxWorkload = new AnalysisUtil().getWorkload(tasks.get(0).DagList, "max");
 			
-			tasks.get(0).DagList.sort((p1, p2) -> Long.compare(p1.getWCET(false), p2.getWCET(false)));
+			tasks.get(0).DagList.sort((p1, p2) -> Long.compare(p1.getWCET("max"), p2.getWCET("max")));
 			
-			MinWCET = tasks.get(0).DagList.get(0).getWCET(false);
+			MinWCET = tasks.get(0).DagList.get(0).getWCET("max");
 			
 			
-			MaxWCET = tasks.get(0).DagList.get(tasks.get(0).DagList.size()-1).getWCET(false);
+			MaxWCET = tasks.get(0).DagList.get(tasks.get(0).DagList.size()-1).getWCET("max");
 			
 			MedianWCET =  new AnalysisUtil().findMedianWCET(tasks.get(0).DagList) ;
 			 
@@ -215,19 +224,30 @@ public class SimulationExp {
 //			System.out.print("the bound is" + makespan2);
 //	
 //			System.out.print("the simulation is" + makespan1);
-//		    new Util.DrawDag(tasks.get(0), tasks.get(0).DagList);
+		    new Util.DrawDag(tasks.get(0), tasks.get(0).DagList);
 //			
 
 				if (new AnomalyAnalysis().AnalyzeAnomaly(tasks.get(0).DagList, core)) {
 
-					makespan1 = new AnalysisUtil()
-							.getMakespan(new Makespan().getMakespan(tasks.get(0).DagList, CoreNum, false));
+					
+					
+					ArrayList<Core> corelist = new Makespan().getMakespan(tasks.get(0).DagList, core, "max");
 
-					for (int j = 0; j < 10000; j++) {
+					
+					makespan1 = new AnalysisUtil().getMakespan(corelist);
+					
+					new Util.PrintGantt(corelist, makespan1,"max");
+					
+					
+					for (int j = 0; j < 100; j++) {
 
 						makespan2 = new AnalysisUtil()
-								.getMakespan(new Makespan().getMakespan(tasks.get(0).DagList, CoreNum, true));
+								.getMakespan(new Makespan().getMakespan(tasks.get(0).DagList, CoreNum, "random"));
 
+						
+						System.out.print("\n the maximum makespan is " + makespan1 + "the generated makespan is " + makespan2 );
+			
+						
 						if (makespan2 > makespan1) {
 
 							IsAnomaly = 1;
@@ -236,6 +256,9 @@ public class SimulationExp {
 					}
 
 				} else {
+					
+					System.out.print("no anomaly") ;
+				
 
 					IsAnomaly = 0;
 
@@ -243,7 +266,7 @@ public class SimulationExp {
 				
 				
 				
-				try (FileWriter fileWriter = new FileWriter(filePath);
+				try (FileWriter fileWriter = new FileWriter(filePath, true);
 					     PrintWriter printWriter = new PrintWriter(fileWriter)) {
 					    
 				

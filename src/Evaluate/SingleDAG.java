@@ -107,14 +107,14 @@ public class SingleDAG {
 			
 
 			makespan1 = new AnalysisUtil()
-					.getMakespan(new Makespan().getMakespan(tasks.get(0).DagList, core, false));
+					.getMakespan(new Makespan().getMakespan(tasks.get(0).DagList, core, "max"));
 
 //			
 			if (new AnomalyAnalysis().AnalyzeAnomaly(tasks.get(0).DagList, core)) {
 
 				for (int j = 0; j < 10000; j++) {
 
-					ArrayList<Core> corelist = new Makespan().getMakespan(tasks.get(0).DagList, core, true);
+					ArrayList<Core> corelist = new Makespan().getMakespan(tasks.get(0).DagList, core, "max");
 
 					makespan2 = new AnalysisUtil().getMakespan(corelist);
 
@@ -122,10 +122,10 @@ public class SingleDAG {
 
 						new Util.DrawDag(tasks.get(0), tasks.get(0).DagList);
 
-						new Util.PrintGantt(new Makespan().getMakespan(tasks.get(0).DagList, core, false), makespan1,
-								false);
+						new Util.PrintGantt(new Makespan().getMakespan(tasks.get(0).DagList, core,"max"), makespan1,
+								"max");
 
-						new Util.PrintGantt(corelist, makespan2, true);
+						new Util.PrintGantt(corelist, makespan2, "random");
 						
 				        try {
 				            Thread.sleep(10000000); // Pause for 1000 milliseconds or 1 second

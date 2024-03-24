@@ -121,7 +121,7 @@ public class AnalysisUtil {
 
 		for (int i = 0; i < Dag1.size(); i++) {
 
-			Dag2.add(new Node(Dag1.get(i).getWCET(false), Dag1.get(i).getIndex()));
+			Dag2.add(new Node(Dag1.get(i).getWCET("max"), Dag1.get(i).getIndex()));
 
 			Dag2.get(i).setPriority(Dag1.get(i).getPriority());
 
@@ -307,7 +307,7 @@ public class AnalysisUtil {
 
 			Collections.reverse(DagList.get(i).grouppre);
 
-			DagList.get(i).groupfront = DagList.get(i).getWCET(false)
+			DagList.get(i).groupfront = DagList.get(i).getWCET("max")
 					+ (DagList.get(i).grouppre.isEmpty() ? 0 : DagList.get(i).grouppre.get(0).groupfront);
 
 		}
@@ -320,7 +320,7 @@ public class AnalysisUtil {
 
 			Collections.reverse(DagList.get(i).groupsuc);
 
-			DagList.get(i).groupback = DagList.get(i).getWCET(false)
+			DagList.get(i).groupback = DagList.get(i).getWCET("max")
 					+ (DagList.get(i).groupsuc.isEmpty() ? 0 : DagList.get(i).groupsuc.get(0).groupback);
 
 		}
@@ -330,7 +330,7 @@ public class AnalysisUtil {
 		for (int i = 0; i < DagList.size(); i++) {
 
 			DagList.get(i).grouppath = DagList.get(i).groupback + DagList.get(i).groupfront
-					- DagList.get(i).getWCET(false);
+					- DagList.get(i).getWCET("max");
 
 		}
 
@@ -476,7 +476,7 @@ public class AnalysisUtil {
 				// further remove the scenario, when remove the nodes that starts earlier
 				for (Node node1 : thelist) {
 
-					if (node1.getStart(false) < theOne.getStart(false)) {
+					if (node1.getStart("max") < theOne.getStart("max")) {
 
 						newParallel.remove(node1);
 
@@ -627,7 +627,7 @@ public class AnalysisUtil {
 		System.out.print("{");
 		for (int i = 0; i < task.DagList.size(); i++) {
 
-			System.out.print(task.DagList.get(i).getWCET(false) + ", ");
+			System.out.print(task.DagList.get(i).getWCET("max") + ", ");
 		}
 
 		System.out.print("}\n");
@@ -770,7 +770,7 @@ public class AnalysisUtil {
 		List<Long> wcetValues = new ArrayList<>();
 		
 		for (Node node : nodes) {
-			wcetValues.add(node.getWCET(false));
+			wcetValues.add(node.getWCET("max"));
 		}
 
 		Collections.sort(wcetValues);
@@ -805,8 +805,8 @@ public class AnalysisUtil {
 
 		for (Node inter : Interference) {
 
-			interference += inter.getTempf() == 0 ? inter.getWCET(false)
-					: Math.min(inter.getTempf() - point, inter.getWCET(false));
+			interference += inter.getTempf() == 0 ? inter.getWCET("max")
+					: Math.min(inter.getTempf() - point, inter.getWCET("max"));
 
 		}
 
@@ -820,7 +820,7 @@ public class AnalysisUtil {
 
 		for (Node inter : Interference) {
 
-			interference += inter.getWCET(false);
+			interference += inter.getWCET("max");
 
 		}
 
@@ -836,11 +836,11 @@ public class AnalysisUtil {
 
 			if (inter.getTempf() == -1) {
 
-				interference += inter.getWCET(false);
+				interference += inter.getWCET("max");
 
 			} else {
 
-				interference += Math.min(inter.getTempf() - point, inter.getWCET(false));
+				interference += Math.min(inter.getTempf() - point, inter.getWCET("max"));
 			}
 
 		}
@@ -867,7 +867,7 @@ public class AnalysisUtil {
 
 		}
 
-		lowlist.sort((p1, p2) -> Long.compare(p1.getWCET(false), p2.getWCET(false)));
+		lowlist.sort((p1, p2) -> Long.compare(p1.getWCET("max"), p2.getWCET("max")));
 
 		Collections.reverse(lowlist);
 
@@ -911,7 +911,7 @@ public class AnalysisUtil {
 
 		for (Node a : list) {
 
-			sum += a.getWCET(false);
+			sum += a.getWCET("max");
 
 		}
 
@@ -919,21 +919,18 @@ public class AnalysisUtil {
 	}
 	
 	
-	public long getWorkload(ArrayList<Node> list, boolean isEarly) {
+	public long getWorkload(ArrayList<Node> list, String isEarly) {
 
 		long theWorkload = 0;
+		
+		
 
 		for (Node theNode : list) {
 
-			if (isEarly) {
 
-				theWorkload += theNode.getWCET(true);
+				theWorkload += theNode.getWCET(isEarly);
 
-			} else {
 
-				theWorkload += theNode.getWCET(false);
-
-			}
 
 		}
 

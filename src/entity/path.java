@@ -199,7 +199,7 @@ public class path {
 		long interference =0;
 		for(Node inter: PathI) {
 			
-			interference +=  inter.getWCET(false);
+			interference +=  inter.getWCET("max");
 			
 			
 		}

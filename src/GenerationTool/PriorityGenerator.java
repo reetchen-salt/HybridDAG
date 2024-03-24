@@ -206,7 +206,7 @@ public class PriorityGenerator {
 				plist = (ArrayList<Node>) plist.stream()
 					    .sorted(Comparator
 					        .comparing(Node::getWeight).reversed()
-					        .thenComparing(node -> node.getWCET(false)).reversed())
+					        .thenComparing(node -> node.getWCET("max")).reversed())
 					    .collect(Collectors.toCollection(ArrayList::new));
 //				plist.sort((p1, p2) -> Long.compare(p1.getWCET(), p2.getWCET()));
 //				
@@ -307,7 +307,7 @@ public class PriorityGenerator {
 				plist = plist.stream()
 					    .sorted(Comparator
 					        .comparing(Node::getWeight).reversed()
-					        .thenComparing((Node node) -> node.getWCET(false)).reversed())
+					        .thenComparing((Node node) -> node.getWCET("max")).reversed())
 					    .collect(Collectors.toCollection(ArrayList::new));
 				
 //				Collections.reverse(plist);
@@ -403,7 +403,7 @@ public class PriorityGenerator {
 		
 	
 		
-		t.DagList.sort((p1, p2) -> Long.compare(p1.getWCET(false), p2.getWCET(false)));
+		t.DagList.sort((p1, p2) -> Long.compare(p1.getWCET("max"), p2.getWCET("max")));
 		
 		Collections.reverse(t.DagList);
 		
@@ -424,7 +424,7 @@ public class PriorityGenerator {
 		
 	
 		
-		t.DagList.sort((p1, p2) -> Long.compare(p1.getWCET(false), p2.getWCET(false)));
+		t.DagList.sort((p1, p2) -> Long.compare(p1.getWCET("max"), p2.getWCET("max")));
 		
 		Collections.reverse(t.DagList);
 		

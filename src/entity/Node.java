@@ -53,7 +53,7 @@ public class Node {
 	private long earlyT = 0;
 	private long lateT=0;
 	
-	
+	private long randomT=0;
 	
 
 	public long[] simulation;
@@ -127,10 +127,10 @@ public class Node {
 
 	public long getWeight() {
 
-		weight = getWCET(false);
+		weight = getWCET("max");
 		for (Node i : Descendant) {
 
-			weight += i.getWCET(false);
+			weight += i.getWCET("max");
 
 		}
 
@@ -142,16 +142,18 @@ public class Node {
 		return index;
 	}
 
-	public long getWCET(boolean isEarlier) {
-	    // Assuming WCET is a variable of a numeric type defined elsewhere in your class
-		if(isEarlier) 
-	    	return getNewWCET();
-		else 
-			return WCET;
-			
-
-	}
-	
+    public long getWCET(String input) {
+        switch (input) {
+            case "max":
+                return WCET;
+            case "min":
+                return (long) (0.5 * WCET);
+            case "random":
+                return getNewWCET();
+            default:
+                throw new IllegalArgumentException("Unknown output type.");
+        }
+    }
 	public void setNewWCET() {
 		
 		double scaleFactor = 0.5 * Math.random() + 0.5;
@@ -189,22 +191,22 @@ public class Node {
 	}
 	
 	
-	public long getLP() {
-
-		if (predecessor.isEmpty()) {
-
-			return 0;
-
-		} else {
-
-			predecessor.sort((p1, p2) -> Long.compare(p1.getLateT(), p2.getLateT()));
-			Collections.reverse(predecessor);
-
-			return predecessor.get(0).getLateT();
-
-		}
-
-	}
+//	public long getLP() {
+//
+//		if (predecessor.isEmpty()) {
+//
+//			return 0;
+//
+//		} else {
+//
+//			predecessor.sort((p1, p2) -> Long.compare(p1.getLateT(), p2.getLateT()));
+//			Collections.reverse(predecessor);
+//
+//			return predecessor.get(0).getLateT();
+//
+//		}
+//
+//	}
 	
 	
 	
@@ -274,16 +276,37 @@ public class Node {
 	}
 	
 	
-	public long getnewf(boolean isEarly) {
+	public long getNewf(String input) {
 
-		if(isEarly)
-			return getEarlyT();
-		
-		else
-			return getLateT();
+	      switch (input) {
+          case "max":
+               return lateT;
+          case "min":
+              return earlyT;
+          case "random":
+              return randomT;
+          default:
+              throw new IllegalArgumentException("Unknown output type.");
+      }
 
 	}
 	
+	
+	public void setNewf(Long tempf, String input) {
+	    switch (input) {
+	        case "max":
+	            lateT = tempf;
+	            break; // Prevents fall-through
+	        case "min":
+	            earlyT = tempf;
+	            break; // Prevents fall-through
+	        case "random":
+	            randomT = tempf;
+	            break; // Prevents fall-through
+	        default:
+	            throw new IllegalArgumentException("Unknown output type.");
+	    }
+	}
 	
 
 	public long getlenA() {
@@ -310,16 +333,11 @@ public class Node {
 
 	}
 
-	public long getStart(boolean isEarly) {
+	public long getStart(String input) {
 		
-		if(isEarly==true) {
-			
-			return getEarlyT()-getWCET(true);
-		}else {
-			
-			
-			return getLateT()-getWCET(false);
-		}
+
+	
+		return getNewf(input)-getWCET(input);
 
 		
 
@@ -332,27 +350,27 @@ public class Node {
 	
 	
 	
-	
-    // Getter for earlyT
-    public long getEarlyT() {
-        return earlyT;
-    }
-
-    // Setter for earlyT
-    public void setEarlyT(long earlyT) {
-        this.earlyT = earlyT;
-       
-    }
-
-    // Getter for lateT
-    public long getLateT() {
-        return lateT;
-    }
-
-    // Setter for lateT
-    public void setLateT(long lateT) {
-        this.lateT = lateT;
-    }
+//	
+//    // Getter for earlyT
+//    public long getEarlyT() {
+//        return earlyT;
+//    }
+//
+//    // Setter for earlyT
+//    public void setEarlyT(long earlyT) {
+//        this.earlyT = earlyT;
+//       
+//    }
+//
+//    // Getter for lateT
+//    public long getLateT() {
+//        return lateT;
+//    }
+//
+//    // Setter for lateT
+//    public void setLateT(long lateT) {
+//        this.lateT = lateT;
+//    }
 
 //	public long getInterference(long point) {
 //		

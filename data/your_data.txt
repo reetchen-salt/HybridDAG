@@ -1,0 +1,2 @@
+MaxMakespan,MinMakespan,MinWorkload,MaxWorkload,MaxWCET,MinWCET,MedianWCET,NumNodes,MaxParallel,CriticalPath,AvgInDegree,AvgOutDegree,CoreNum,IsAnomaly
+274619,137307,218196,436400,158717,21938,23600.000000,10,4,4,1,1,3,999
