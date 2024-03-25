@@ -55,23 +55,23 @@ public class SimulationExp {
 	        }
 			
 
-//		int[] Core = { 3,4,6,7,8,9 };
-//
-//		int[] Par = { 4,5,6,7,8,9,10 };
-//
-//		int[] Cri = { 4,5,6,7,8,9,10 };
-//		
+		int[] Core = { 3,4,6,7,8,9 };
+
+		int[] Par = { 4,5,6,7,8,9,10 };
+
+		int[] Cri = { 4,5,6,7,8,9,10 };
 		
-
-		int[] Core = { 3};
-
-		int[] Par = { 4 };
-
-		int[] Cri = { 4 };
-
+		
+//
+//		int[] Core = { 3};
+//
+//		int[] Par = { 4 };
+//
+//		int[] Cri = { 4 };
+//
 		double[] ratio = { 0.2 };
 
-		int times = 1;
+		int times = 1000;
 
 		SimulationExp ep = new SimulationExp();
 
@@ -97,41 +97,41 @@ public class SimulationExp {
 
 		ad.await();
 
-//		for (int t = 0; t < Par.length; t++) {
-//			
-//			final int not=t;
-//
-//			new Thread(new Runnable() {
-//				@Override
-//				public void run() {
-//				
-//					ep.PriorityOrder(Core[0], Par[not], Cri[0], times,"NoPar", ratio[0]);
-//					
-//					ep.countDown(bd);
-//				}
-//			}).start();
-//			
-//		}
-//		bd.await();
-//		
-//
-//		for (int a = 0; a < Cri.length; a++) {
-//			
-//			final int noa=a;
-//
-//			new Thread(new Runnable() {
-//				@Override
-//				public void run() {
-//					ep.PriorityOrder(Core[0], Par[0], Cri[noa], times,"NoCri", ratio[0]);
-//					
-//					ep.countDown(cd);
-//
-//				}
-//			}).start();
-//			
-//		}
-//		cd.await();
-//		
+		for (int t = 0; t < Par.length; t++) {
+			
+			final int not=t;
+
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+				
+					ep.PriorityOrder(Core[0], Par[not], Cri[0], times,"NoPar", ratio[0]);
+					
+					ep.countDown(bd);
+				}
+			}).start();
+			
+		}
+		bd.await();
+		
+
+		for (int a = 0; a < Cri.length; a++) {
+			
+			final int noa=a;
+
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					ep.PriorityOrder(Core[0], Par[0], Cri[noa], times,"NoCri", ratio[0]);
+					
+					ep.countDown(cd);
+
+				}
+			}).start();
+			
+		}
+		cd.await();
+		
 
 	}
 
@@ -171,6 +171,8 @@ public class SimulationExp {
 
 		
 		for (int i = 0; i < TOTAL_NUMBER_OF_DAGs; i++) {
+			
+			System.out.print("\n New DAG is generated： " + i);
 
 			ArrayList<DAG> tasks = generator.generateTasks();
 
@@ -220,11 +222,8 @@ public class SimulationExp {
 			 CoreNum = core;
 			
 		
-			
-//			System.out.print("the bound is" + makespan2);
-//	
-//			System.out.print("the simulation is" + makespan1);
-		    new Util.DrawDag(tasks.get(0), tasks.get(0).DagList);
+
+//		    new Util.DrawDag(tasks.get(0), tasks.get(0).DagList);
 //			
 
 				if (new AnomalyAnalysis().AnalyzeAnomaly(tasks.get(0).DagList, core)) {
@@ -236,16 +235,19 @@ public class SimulationExp {
 					
 					makespan1 = new AnalysisUtil().getMakespan(corelist);
 					
-					new Util.PrintGantt(corelist, makespan1,"max");
+//					new Util.PrintGantt(corelist, makespan1,"max");
 					
 					
-					for (int j = 0; j < 100; j++) {
-
-						makespan2 = new AnalysisUtil()
-								.getMakespan(new Makespan().getMakespan(tasks.get(0).DagList, CoreNum, "random"));
-
+					for (int j = 0; j < 1; j++) {
 						
-						System.out.print("\n the maximum makespan is " + makespan1 + "the generated makespan is " + makespan2 );
+						
+						ArrayList<Core> corelist2 = new Makespan().getMakespan(tasks.get(0).DagList, core, "random");
+
+						makespan2 = new AnalysisUtil().getMakespan(corelist2);
+
+//						new Util.PrintGantt(corelist2, makespan1,"random");
+						
+//						System.out.print("\n the maximum makespan is " + makespan1 + "the generated makespan is " + makespan2 );
 			
 						
 						if (makespan2 > makespan1) {
@@ -256,9 +258,7 @@ public class SimulationExp {
 					}
 
 				} else {
-					
-					System.out.print("no anomaly") ;
-				
+	
 
 					IsAnomaly = 0;
 

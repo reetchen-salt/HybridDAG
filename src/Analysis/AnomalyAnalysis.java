@@ -90,11 +90,11 @@ public class AnomalyAnalysis {
 //
 //		}
 
-		if (anomaly == false) {
-
-			System.out.print("no anomaly\n");
-
-		}
+//		if (anomaly == false) {
+//
+//			System.out.print("no anomaly\n");
+//
+//		}
 
 		
 		return anomaly;
