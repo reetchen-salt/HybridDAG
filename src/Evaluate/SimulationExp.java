@@ -29,7 +29,7 @@ public class SimulationExp {
 	static PrintWriter writer = null;
 	static PrintWriter writer2 = null;
 	int count = 0;
-	static String filePath = "data/your_data.txt";
+	static String filePath = "data/Allexperiments.csv";
 
 	public synchronized void countDown(CountDownLatch cd) {
 		cd.countDown();
@@ -55,85 +55,46 @@ public class SimulationExp {
 	        }
 			
 
-		int[] Core = { 3,4,6,7,8,9 };
+        int[] Core = { 3, 4, 6, 7, 8, 9 };
+        int[] Par = { 4, 5, 6, 7, 8, 9, 10 };
+        int[] Cri = { 4, 5, 6, 7, 8, 9, 10 };
+        double[] ratio = { 0.2 };
+        int times = 1000;
 
-		int[] Par = { 4,5,6,7,8,9,10 };
+        // Calculate the total number of threads/tasks to wait for
+        int totalTasks = Core.length * Par.length * Cri.length;
+        CountDownLatch latch = new CountDownLatch(totalTasks);
 
-		int[] Cri = { 4,5,6,7,8,9,10 };
-		
-		
-//
-//		int[] Core = { 3};
-//
-//		int[] Par = { 4 };
-//
-//		int[] Cri = { 4 };
-//
-		double[] ratio = { 0.2 };
+        SimulationExp ep = new SimulationExp();
 
-		int times = 1000;
+        // Loop through all combinations of Core, Par, and Cri
+        for (int core : Core) {
+            for (int par : Par) {
+                for (int cri : Cri) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                ep.PriorityOrder(core, par, cri, times, "Experiment", ratio[0]);
+                            } finally {
+                                // Ensure the latch count is decremented even if an exception is thrown
+                                latch.countDown();
+                            }
+                        }
+                    }).start();
+                }
+            }
+        }
 
-		SimulationExp ep = new SimulationExp();
-
-		CountDownLatch ad = new CountDownLatch(Core.length);
-		CountDownLatch bd = new CountDownLatch(Par.length);
-		CountDownLatch cd = new CountDownLatch(Cri.length);
-
-		for (int p = 0; p < Core.length; p++) {
-
-			final int nop = p;
-
-			new Thread(new Runnable() {
-				@Override
-				public void run() {
-					ep.PriorityOrder(Core[nop], Par[0], Cri[0], times, "NoCore", ratio[0]);
-
-					ep.countDown(ad);
-				}
-
-			}).start();
-
-		}
-
-		ad.await();
-
-		for (int t = 0; t < Par.length; t++) {
-			
-			final int not=t;
-
-			new Thread(new Runnable() {
-				@Override
-				public void run() {
-				
-					ep.PriorityOrder(Core[0], Par[not], Cri[0], times,"NoPar", ratio[0]);
-					
-					ep.countDown(bd);
-				}
-			}).start();
-			
-		}
-		bd.await();
+        // Wait for all threads to complete
+        latch.await();
+        
+        System.out.println("All simulations completed.");
+    }
+    
 		
 
-		for (int a = 0; a < Cri.length; a++) {
-			
-			final int noa=a;
-
-			new Thread(new Runnable() {
-				@Override
-				public void run() {
-					ep.PriorityOrder(Core[0], Par[0], Cri[noa], times,"NoCri", ratio[0]);
-					
-					ep.countDown(cd);
-
-				}
-			}).start();
-			
-		}
-		cd.await();
-		
-
-	}
+	
 
 //-------------------start the system, return RTA of MSRP and MrsP
 	public void PriorityOrder(int core, int parallelism, int critical_path, int TOTAL_NUMBER_OF_DAGs, String name,
@@ -238,7 +199,7 @@ public class SimulationExp {
 //					new Util.PrintGantt(corelist, makespan1,"max");
 					
 					
-					for (int j = 0; j < 1; j++) {
+					for (int j = 0; j < 10000; j++) {
 						
 						
 						ArrayList<Core> corelist2 = new Makespan().getMakespan(tasks.get(0).DagList, core, "random");
