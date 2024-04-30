@@ -432,18 +432,20 @@ public class AnalysisUtil {
 
 	public boolean getPath(ArrayList<Node> list, Node theOne, int number) {
 
-		ArrayList<Node> remove = new ArrayList<Node>();
+		
+		// remove this section for now, because we identified not safe
+//		ArrayList<Node> remove = new ArrayList<Node>();
 
 		// for those who release at the same time or later than theOne, if
 		// it cannot block, its successor cannot block
 
-		for (Node node1 : list) {
-
-			if (node1.predecessor.containsAll(theOne.predecessor)) {
-
-				remove.addAll(node1.Descendant);
-
-			}
+//		for (Node node1 : list) {
+//
+//			if (node1.predecessor.containsAll(theOne.predecessor)) {
+//
+//				remove.addAll(node1.Descendant);
+//
+//			}
 
 //			if(node1.getStart(true)> theOne.getStart(false)) {
 //				
@@ -451,9 +453,9 @@ public class AnalysisUtil {
 //			}
 //			
 
-		}
+//		}
 
-		list.removeAll(remove);
+//		list.removeAll(remove);
 
 		// create a 2 d list contains a series of nodes lists
 		// all the node lists contains nodes that can be parallel to each other
@@ -470,24 +472,27 @@ public class AnalysisUtil {
 		for (ArrayList<Node> thelist : twoDList) {
 
 			if (thelist.size() > number && thelist.get(0).getPriority() <= theOne.getPriority()) {
+				
+				
+				// found some bugs, so this part is cancelled.
 
-				ArrayList<Node> newParallel = new ArrayList<Node>(thelist);
-
-				// further remove the scenario, when remove the nodes that starts earlier
-				for (Node node1 : thelist) {
-
-					if (node1.getStart("max") < theOne.getStart("max")) {
-
-						newParallel.remove(node1);
-
-					}
-				}
-				newParallel.sort((p1, p2) -> Integer.compare(p1.getPriority(), p2.getPriority()));
-
-				if (newParallel.get(0).getPriority() <= theOne.getPriority()) {
+//				ArrayList<Node> newParallel = new ArrayList<Node>(thelist);
+//
+//				// further remove the scenario, when remove the nodes that starts earlier
+//				for (Node node1 : thelist) {
+//
+//					if (node1.getStart("max") < theOne.getStart("max")) {
+//
+//						newParallel.remove(node1);
+//
+//					}
+//				}
+//				newParallel.sort((p1, p2) -> Integer.compare(p1.getPriority(), p2.getPriority()));
+//
+//				if (newParallel.get(0).getPriority() <= theOne.getPriority()) {
 
 					interference = true;
-				}
+//				}
 
 			}
 

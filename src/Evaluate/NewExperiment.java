@@ -22,9 +22,9 @@ import Analysis.Makespan;
 import entity.Core;
 import entity.DAG;
 
-public class SingleDAG {
+public class NewExperiment{
 
-	public static int MAX_PERIOD = 2000;
+	public static int MAX_PERIOD = 3000;
 	public static int MIN_PERIOD = 1000;
 
 	public static int SEED = 1000;
@@ -49,7 +49,7 @@ public class SingleDAG {
         int totalTasks = Core.length * Par.length * Cri.length;
         CountDownLatch latch = new CountDownLatch(totalTasks);
 
-        SingleDAG ep = new SingleDAG();
+        NewExperiment ep = new NewExperiment();
 
         // Loop through all combinations of Core, Par, and Cri
         for (int core : Core) {
@@ -90,7 +90,11 @@ public class SingleDAG {
 
 		long makespan2 = 0;
 
-		int anomalyDetected =0;
+		int anomalyYes =0;
+		
+		int anomalyNo =0;
+		
+		int unlabelled = 0;
 		
 
 		for (int i = 0; i < TOTAL_NUMBER_OF_SYSTEMS; i++) {
@@ -111,7 +115,9 @@ public class SingleDAG {
 					.getMakespan(new Makespan().getMakespan(tasks.get(0).DagList, core, "max"));
 
 //			
-			if (!new AnomalyAnalysis().AnalyzeAnomaly(tasks.get(0).DagList, core)) {
+			if (new AnomalyAnalysis().AnalyzeAnomaly(tasks.get(0).DagList, core)) {
+				
+				boolean detected = false;
 
 				for (int j = 0; j < 10000; j++) {
 
@@ -120,33 +126,43 @@ public class SingleDAG {
 					makespan2 = new AnalysisUtil().getMakespan(corelist);
 
 					if (makespan2 > makespan1) {
-
-						new Util.DrawDag(tasks.get(0), tasks.get(0).DagList);
-
-						new Util.PrintGantt(new Makespan().getMakespan(tasks.get(0).DagList, core,"max"), makespan1,
-								"max");
-
-						new Util.PrintGantt(corelist, makespan2, "random");
 						
-				        try {
-				            Thread.sleep(100000000); // Pause for 1000 milliseconds or 1 second
-				            // Continue with the loop after the pause
-				        } catch (InterruptedException e) {
-				            Thread.currentThread().interrupt(); // handle interrupted exception
-				        }
+						detected = true;
 
+		
 					}
 
 				}
+				
+				if(detected == false) {
+					
+					unlabelled++;
+				}else {
+					anomalyYes++;
+					
+				}
+				
+				
 
+			}else {
+				
+				anomalyNo++; 
+				
+				
+				
+				
 			}
+			
+			
+			
+			
 
 		}
 		
 		
-		System.out.print("\n test done");
+		System.out.print("\n For Core: " + core+", Parallelism: "+ parallelism+", Length: " + critical_path );
 		
-
+		System.out.print("\n We have Anomaly: " +anomalyYes +", Anomaly-free: "+ anomalyNo+", unlabelled: " + unlabelled );
 		
 
 	}
