@@ -55,10 +55,10 @@ public class SimulationExp {
 	        }
 			
 
-        int[] Core = { 3, 4, 6, 7, 8, 9 };
-        int[] Par = { 4, 5, 6, 7, 8, 9, 10 };
-        int[] Cri = { 4, 5, 6, 7, 8, 9, 10 };
-        double[] ratio = { 0.2 };
+        int[] Core = { 3, 4, 5, 6, 7, 8, 9 };
+        int[] Par = {  5, 6, 7, 8, 9, 10,11 };
+        int[] Cri = {  5, 6, 7, 8, 9, 10,11};
+        double[] ratio = { 0.5 };
         int times = 1000;
 
         // Calculate the total number of threads/tasks to wait for
