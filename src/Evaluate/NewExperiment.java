@@ -39,42 +39,48 @@ public class NewExperiment{
 
 	public static void main(String args[]) throws Exception {
 
-        int[] Core = { 3, 4, 6, 7, 8, 9 };
-        int[] Par = { 4, 5, 6, 7, 8, 9, 10 };
-        int[] Cri = { 4, 5, 6, 7, 8, 9, 10 };
-        double[] ratio = { 0.2 };
-        int times = 1000;
+		int[] Core = { 3, 4, 6, 7, 8, 9 };
+		int[] Par = { 4, 5, 6, 7, 8, 9, 10 };
+		int[] Cri = { 4, 5, 6, 7, 8, 9, 10 };
+		double[] ratio = { 0.2 };
+		int times = 1000;
 
-        // Calculate the total number of threads/tasks to wait for
-        int totalTasks = Core.length * Par.length * Cri.length;
-        CountDownLatch latch = new CountDownLatch(totalTasks);
+		NewExperiment ep = new NewExperiment();
 
-        NewExperiment ep = new NewExperiment();
+		// Thread to vary Core, keeping Par and Cri constant
+		new Thread(new Runnable() {
+		    @Override
+		    public void run() {
+		        for (int core : Core) {
+		            ep.PriorityOrder(core, Par[1], Cri[1], times, "core", ratio[0]);
+		        }
+		        System.out.println("Core simulation completed.");
+		    }
+		}).start();
 
-        // Loop through all combinations of Core, Par, and Cri
-        for (int core : Core) {
-            for (int par : Par) {
-                for (int cri : Cri) {
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                ep.PriorityOrder(core, par, cri, times, "Experiment", ratio[0]);
-                            } finally {
-                                // Ensure the latch count is decremented even if an exception is thrown
-                                latch.countDown();
-                            }
-                        }
-                    }).start();
-                }
-            }
-        }
+		// Thread to vary Par, keeping Core and Cri constant
+		new Thread(new Runnable() {
+		    @Override
+		    public void run() {
+		        for (int par : Par) {
+		            ep.PriorityOrder(Core[1], par, Cri[1], times, "parallelism", ratio[0]);
+		        }
+		        System.out.println("Par simulation completed.");
+		    }
+		}).start();
 
-        // Wait for all threads to complete
-        latch.await();
-        
-        System.out.println("All simulations completed.");
-	
+		// Thread to vary Cri, keeping Core and Par constant
+		new Thread(new Runnable() {
+		    @Override
+		    public void run() {
+		        for (int cri : Cri) {
+		            ep.PriorityOrder(Core[1], Par[1], cri, times, "length", ratio[0]);
+		        }
+		        System.out.println("Cri simulation completed.");
+		    }
+		}).start();
+//
+
 
 	}
 
@@ -85,17 +91,23 @@ public class NewExperiment{
 		// -----
 		SimpleSystemGenerator generator = new SimpleSystemGenerator(MIN_PERIOD, MAX_PERIOD, 1, true, SEED, parallelism,
 				critical_path, ratio);
+		
+		
+		long WCRT=0;
+		
+		double advantage=0;
+		
+		double meanAdvantage = 0;
 
 		long makespan1 = 0;
 
 		long makespan2 = 0;
 
-		int anomalyYes =0;
-		
-		int anomalyNo =0;
-		
+		int anomalyYes = 0;
+
+		int anomalyNo = 0;
+
 		int unlabelled = 0;
-		
 
 		for (int i = 0; i < TOTAL_NUMBER_OF_SYSTEMS; i++) {
 
@@ -103,20 +115,18 @@ public class NewExperiment{
 
 			tasks.get(0).setPriority(0);
 
-
-
 			new PriorityGenerator().MyAssignment(tasks.get(0));
-	
+
+			
+			WCRT = new Nonpreemptive().WCmakespan(tasks.get(0), core);
 //
 //			makespan1 = new Makespan().getMakespan(tasks.get(0).DagList, core,true);
-			
 
-			makespan1 = new AnalysisUtil()
-					.getMakespan(new Makespan().getMakespan(tasks.get(0).DagList, core, "max"));
+			makespan1 = new AnalysisUtil().getMakespan(new Makespan().getMakespan(tasks.get(0).DagList, core, "max"));
 
 //			
 			if (new AnomalyAnalysis().AnalyzeAnomaly(tasks.get(0).DagList, core)) {
-				
+
 				boolean detected = false;
 
 				for (int j = 0; j < 10000; j++) {
@@ -126,45 +136,48 @@ public class NewExperiment{
 					makespan2 = new AnalysisUtil().getMakespan(corelist);
 
 					if (makespan2 > makespan1) {
-						
+
 						detected = true;
 
-		
 					}
 
 				}
-				
-				if(detected == false) {
-					
-					unlabelled++;
-				}else {
-					anomalyYes++;
-					
-				}
-				
-				
 
-			}else {
+				if (detected == false) {
+
+					unlabelled++;
+				} else {
+					anomalyYes++;
+
+				}
+
+			} else {
 				
-				anomalyNo++; 
+				advantage += (WCRT - makespan1)/(double)makespan1 ;
 				
-				
-				
-				
+//				System.out.print("\n we have WCRT: "+ WCRT + " we have simulated makepsan: " + makespan1);
+//				
+//				System.out.print(" \n the advantage is " + advantage);
+				anomalyNo++;
+
 			}
 			
 			
 			
+			meanAdvantage = Math.round(advantage*10000/(double)anomalyNo)/100;
 			
+//			System.out.print("\n we have WCRT: "+ WCRT + " we have simulated makepsan: " + makespan1);
 
 		}
-		
-		
-		System.out.print("\n For Core: " + core+", Parallelism: "+ parallelism+", Length: " + critical_path );
-		
-		System.out.print("\n We have Anomaly: " +anomalyYes +", Anomaly-free: "+ anomalyNo+", unlabelled: " + unlabelled );
-		
 
+		System.out.print("\n For Core: " + core + ", Parallelism: " + parallelism + ", Length: " + critical_path);
+
+
+		System.out.print(
+				"\n We have Anomaly: " + anomalyYes + ", Anomaly-free: " + anomalyNo + ", unlabelled: " + unlabelled);
+		
+		System.out.print(
+				"\n We have meanAdvantage: " + meanAdvantage);
 	}
 
 
