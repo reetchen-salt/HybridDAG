@@ -24,7 +24,7 @@ import entity.DAG;
 
 public class SingleDAG {
 
-	public static int MAX_PERIOD = 2000;
+	public static int MAX_PERIOD = 3000;
 	public static int MIN_PERIOD = 1000;
 
 	public static int SEED = 1000;
