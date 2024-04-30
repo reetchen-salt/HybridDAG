@@ -29,7 +29,7 @@ public class SimulationExp {
 	static PrintWriter writer = null;
 	static PrintWriter writer2 = null;
 	int count = 0;
-	static String filePath = "data/Allexperiments.csv";
+	static String filePath = "data/finalAllexperiments.csv";
 
 	public synchronized void countDown(CountDownLatch cd) {
 		cd.countDown();
@@ -46,8 +46,8 @@ public class SimulationExp {
 	             PrintWriter printWriter = new PrintWriter(fileWriter)) {
 	            
     	    // Writing the header row with updated headers
-		    printWriter.println("MaxMakespan,MinMakespan,MinWorkload,MaxWorkload,MaxWCET,MinWCET,MedianWCET,NumNodes,MaxParallel,CriticalPath,AvgInDegree,AvgOutDegree,CoreNum,IsAnomaly");
-
+			printWriter.println(
+					"MaxMakespan,MinMakespan,MinWorkload,MaxWorkload,MaxWCET,MinWCET,MedianWCET,NumNodes,MaxParallel,CriticalPath,AvgInDegree,AvgOutDegree,CoreNum,IsAnomaly,Par,Cri,WCRT,Advantage");
 
 	        } catch (IOException e) {
 	            System.err.println("An error occurred while writing the file.");
@@ -105,10 +105,10 @@ public class SimulationExp {
 				critical_path, ratio);
 		
 		
-		
+		double advantage = 0;
+		long WCRT = 0;
 		long makespan1 = 0;
 		long makespan2 =0;
-		
 		long MaxMakespan = 0;
 		long MinMakespan = 0;
 		long MinWorkload = 0;
@@ -144,11 +144,14 @@ public class SimulationExp {
 			
 	
 			
-//			makespan2 = new Analysis.Nonpreemptive().WCmakespan(tasks.get(0), core);
+			WCRT = new Analysis.Nonpreemptive().WCmakespan(tasks.get(0), core);
 			
 			
 			
 			MaxMakespan = new AnalysisUtil().getMakespan(new Makespan().getMakespan(tasks.get(0).DagList, core,"max"));
+			
+			advantage = Math.ceil(((WCRT - MaxMakespan) / (double) MaxMakespan * 100) * 100) / 100.0;
+
 			
 			MinMakespan = new AnalysisUtil().getMakespan(new Makespan().getMakespan(tasks.get(0).DagList, core,"min"));
 	
@@ -232,7 +235,7 @@ public class SimulationExp {
 					    
 				
 					    // Formatting and writing the data row
-					    String dataRow = String.format("%d,%d,%d,%d,%d,%d,%f,%d,%d,%d,%d,%d,%d,%d",
+					    String dataRow = String.format("%d,%d,%d,%d,%d,%d,%f,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%2f",
 					        MaxMakespan,
 					        MinMakespan,
 					        MinWorkload,
@@ -246,7 +249,11 @@ public class SimulationExp {
 					        AvgInDegree,
 					        AvgOutDegree,
 					        CoreNum,
-					        IsAnomaly
+					        IsAnomaly,
+					        parallelism,
+					        critical_path,
+					        WCRT,
+					        advantage
 					    );
 
 					    // Writing the data row
