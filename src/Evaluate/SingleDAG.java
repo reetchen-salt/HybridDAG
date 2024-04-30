@@ -39,11 +39,11 @@ public class SingleDAG {
 
 	public static void main(String args[]) throws Exception {
 
-		int[] Core = { 3 };
+		int[] Core = { 2,3,4,5};
 
-		int[] Par = { 3 };
+		int[] Par = { 3,4,5,6};
 
-		int[] Cri = { 4 };
+		int[] Cri = { 3,4,5,6 };
 
 		double[] ratio = { 0.2 };
 
@@ -55,14 +55,14 @@ public class SingleDAG {
 		CountDownLatch bd = new CountDownLatch(Par.length);
 		CountDownLatch cd = new CountDownLatch(Cri.length);
 
-		for (int p = 0; p < Core.length; p++) {
+		for (int c = 0; c < Core.length; c++) {
 
-			final int nop = p;
+			final int noc = c;
 
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
-					ep.PriorityOrder(Core[nop], Par[0], Cri[0], times, "NoCore", ratio[0]);
+					ep.PriorityOrder(Core[noc], Par[1], Cri[1], times, "NoCore", ratio[0]);
 
 					ep.countDown(ad);
 				}
@@ -72,7 +72,46 @@ public class SingleDAG {
 		}
 
 		ad.await();
+		
+//		for (int p = 0; p < Par.length; p++) {
+//
+//			final int nop = p;
+//
+//			new Thread(new Runnable() {
+//				@Override
+//				public void run() {
+//					ep.PriorityOrder(Core[1], Par[nop], Cri[1], times, "NoPar", ratio[0]);
+//
+//					ep.countDown(bd);
+//				}
+//
+//			}).start();
+//
+//		}
+//
+//		bd.await();
+//		
+//		
+//		for (int l = 0; l < Cri.length; l++) {
+//
+//			final int nol = l;
+//
+//			new Thread(new Runnable() {
+//				@Override
+//				public void run() {
+//					ep.PriorityOrder(Core[1], Par[1], Cri[nol], times, "NoCri", ratio[0]);
+//
+//					ep.countDown(cd);
+//				}
+//
+//			}).start();
+//
+//		}
+//
+//		cd.await();
 
+
+		System.out.println("\njob done!");
 	
 
 	}
@@ -110,11 +149,11 @@ public class SingleDAG {
 					.getMakespan(new Makespan().getMakespan(tasks.get(0).DagList, core, "max"));
 
 //			
-			if (new AnomalyAnalysis().AnalyzeAnomaly(tasks.get(0).DagList, core)) {
+			if (!new AnomalyAnalysis().AnalyzeAnomaly(tasks.get(0).DagList, core)) {
 
 				for (int j = 0; j < 10000; j++) {
 
-					ArrayList<Core> corelist = new Makespan().getMakespan(tasks.get(0).DagList, core, "max");
+					ArrayList<Core> corelist = new Makespan().getMakespan(tasks.get(0).DagList, core, "random");
 
 					makespan2 = new AnalysisUtil().getMakespan(corelist);
 
@@ -128,7 +167,7 @@ public class SingleDAG {
 						new Util.PrintGantt(corelist, makespan2, "random");
 						
 				        try {
-				            Thread.sleep(10000000); // Pause for 1000 milliseconds or 1 second
+				            Thread.sleep(100000000); // Pause for 1000 milliseconds or 1 second
 				            // Continue with the loop after the pause
 				        } catch (InterruptedException e) {
 				            Thread.currentThread().interrupt(); // handle interrupted exception
@@ -143,7 +182,7 @@ public class SingleDAG {
 		}
 		
 		
-
+		System.out.print("test done");
 		
 
 		
