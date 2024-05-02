@@ -29,7 +29,7 @@ public class SimulationExp {
 	static PrintWriter writer = null;
 	static PrintWriter writer2 = null;
 	int count = 0;
-	static String filePath = "data/finalAllexperiments.csv";
+	static String filePath = "data/51experiments.csv";
 
 	public synchronized void countDown(CountDownLatch cd) {
 		cd.countDown();
@@ -55,9 +55,9 @@ public class SimulationExp {
 	        }
 			
 
-        int[] Core = { 3, 4, 5, 6, 7, 8, 9 };
-        int[] Par = {  5, 6, 7, 8, 9, 10,11 };
-        int[] Cri = {  5, 6, 7, 8, 9, 10,11};
+        int[] Core = { 3, 4, 5, 6, 7, 8 };
+        int[] Par = {  3, 4, 5, 6, 7, 8 };
+        int[] Cri = {  3, 4, 5, 6, 7, 8};
         double[] ratio = { 0.5 };
         int times = 1000;
 
@@ -131,9 +131,11 @@ public class SimulationExp {
 //		double tighterP= 0;
 
 		
+		System.out.print("\n Setting Core: " + core+", Parallel: " + parallelism + ", Length: " + critical_path );
+		
 		for (int i = 0; i < TOTAL_NUMBER_OF_DAGs; i++) {
 			
-			System.out.print("\n New DAG is generated： " + i);
+		
 
 			ArrayList<DAG> tasks = generator.generateTasks();
 
