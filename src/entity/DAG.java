@@ -209,63 +209,102 @@ public class DAG {
 			}
 		}
 
-//		System.out.print(" total WCET list is " + TotalWCET+ "\n" );
+//		System.out.print(" total util  is " + this.util+ "\n" );
 
 //	      TotalWCET =100;
 
-//		Random rand = new Random();
+        // List to store the utilization values for each task
+        List<Double> utilList = new ArrayList<>();
+        Random rand = new Random();
+        
+        // Remaining total utilization to be distributed
+        double remainingUtilization = this.util;
+        
+        // Randomly distribute utilization to numTasks - 1 tasks
+        for (int i = 1; i < DagList.size(); i++) {
+            // Generate a random number between 0 and 1
+            double randVal = rand.nextDouble();
+            
+            // Calculate the utilization for the current task based on remaining utilization
+            double nextUtil = remainingUtilization * (1 - Math.pow(randVal, 1.0 / ( DagList.size() - i)));
+            
+            // Add the calculated utilization to the list
+            utilList.add(nextUtil);
+            
+            // Reduce the remaining total utilization by the assigned amount
+            remainingUtilization -= nextUtil;
+        }
+        
+        // Assign the remaining utilization to the last task
+        utilList.add(remainingUtilization);
+        
+        
+        
+        
+        
 
-		ArrayList<Long> timelist = new ArrayList<Long>();
-
-		long mean = (long) Math.floor(TotalWCET / (double) DagList.size());
-
-		if (mean / 2 < 1) {
-
-			legal = false;
-
-		}
-
-		for (int i = 0; i < DagList.size(); i++) {
-
-			timelist.add(mean / 2);
-
-			TotalWCET -= mean / 2;
-
-		}
-
-		while (TotalWCET != 0) {
-
-			for (int j = 0; j < timelist.size(); j++) {
-
-				long extra = (long) (Math.random() * (TotalWCET + 1));
-
-				timelist.set(j, timelist.get(j)+extra);
-
-				TotalWCET -= extra;
-
-				if (TotalWCET == 0) {
-					break;
-
-				}
-
-			}
-
-		}
-		
-		
-
-		Collections.shuffle(timelist);
+//		long mean = (long) Math.floor(TotalWCET / (double) DagList.size());
+//
+//		if (mean / 2 < 1) {
+//
+//			legal = false;
+//
+//		}
+//
+//		for (int i = 0; i < DagList.size(); i++) {
+//
+//			timeList.add(mean / 2);
+//
+//			TotalWCET -= mean / 2;
+//
+//		}
+//
+//		while (TotalWCET != 0) {
+//
+//			for (int j = 0; j < timeList.size(); j++) {
+//
+//				long extra = (long) (Math.random() * (TotalWCET + 1));
+//
+//				timeList.set(j, timeList.get(j)+extra);
+//
+//				TotalWCET -= extra;
+//
+//				if (TotalWCET == 0) {
+//					break;
+//
+//				}
+//
+//			}
+//
+//		}
+//		
+//		
+//
+//		Collections.shuffle(timeList);
 
 		WCETList = new long[DagList.size()];
 
-		for (int i = 0; i < timelist.size(); i++) {
+		for (int i = 0; i < utilList.size(); i++) {
+			
+			
+			
+			long theWCET = (long)(utilList.get(i)*this.period);
+			
+			if(theWCET < 5) {
+				
+				theWCET = 10;
+			}
 
-			WCETList[i] = timelist.get(i);
+			WCETList[i] = theWCET ;
 
-			DagList.get(i).setWCET(timelist.get(i));
+			DagList.get(i).setWCET(theWCET );
 
 		}
+		
 
+		
+		
+		
 		List<Integer> critical_temp = critical_path(matrix_result, WCETList);
 
 		// critical path
@@ -763,5 +802,11 @@ public class DAG {
 
 		return critic_list;
 	}
+	
+	
+	
+	
+	
+	
 
 }

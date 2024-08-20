@@ -43,7 +43,7 @@ public class NewExperiment{
 		int[] Par = { 4, 5, 6, 7, 8, 9, 10 };
 		int[] Cri = { 4, 5, 6, 7, 8, 9, 10 };
 		double[] ratio = { 0.2 };
-		int times = 1000;
+		int times = 1;
 
 		NewExperiment ep = new NewExperiment();
 
@@ -58,27 +58,27 @@ public class NewExperiment{
 		    }
 		}).start();
 
-		// Thread to vary Par, keeping Core and Cri constant
-		new Thread(new Runnable() {
-		    @Override
-		    public void run() {
-		        for (int par : Par) {
-		            ep.PriorityOrder(Core[1], par, Cri[1], times, "parallelism", ratio[0]);
-		        }
-		        System.out.println("Par simulation completed.");
-		    }
-		}).start();
-
-		// Thread to vary Cri, keeping Core and Par constant
-		new Thread(new Runnable() {
-		    @Override
-		    public void run() {
-		        for (int cri : Cri) {
-		            ep.PriorityOrder(Core[1], Par[1], cri, times, "length", ratio[0]);
-		        }
-		        System.out.println("Cri simulation completed.");
-		    }
-		}).start();
+//		// Thread to vary Par, keeping Core and Cri constant
+//		new Thread(new Runnable() {
+//		    @Override
+//		    public void run() {
+//		        for (int par : Par) {
+//		            ep.PriorityOrder(Core[1], par, Cri[1], times, "parallelism", ratio[0]);
+//		        }
+//		        System.out.println("Par simulation completed.");
+//		    }
+//		}).start();
+//
+//		// Thread to vary Cri, keeping Core and Par constant
+//		new Thread(new Runnable() {
+//		    @Override
+//		    public void run() {
+//		        for (int cri : Cri) {
+//		            ep.PriorityOrder(Core[1], Par[1], cri, times, "length", ratio[0]);
+//		        }
+//		        System.out.println("Cri simulation completed.");
+//		    }
+//		}).start();
 //
 
 
@@ -118,66 +118,67 @@ public class NewExperiment{
 			new PriorityGenerator().MyAssignment(tasks.get(0));
 
 			
-			WCRT = new Nonpreemptive().WCmakespan(tasks.get(0), core);
+//			WCRT = new Nonpreemptive().WCmakespan(tasks.get(0), core);
 //
 //			makespan1 = new Makespan().getMakespan(tasks.get(0).DagList, core,true);
-
 			makespan1 = new AnalysisUtil().getMakespan(new Makespan().getMakespan(tasks.get(0).DagList, core, "max"));
+			
+			new Util.DrawDag(tasks.get(0), tasks.get(0).DagList);
 
 //			
-			if (new AnomalyAnalysis().AnalyzeAnomaly(tasks.get(0).DagList, core)) {
-
-				boolean detected = false;
-
-				for (int j = 0; j < 10000; j++) {
-
-					ArrayList<Core> corelist = new Makespan().getMakespan(tasks.get(0).DagList, core, "random");
-
-					makespan2 = new AnalysisUtil().getMakespan(corelist);
-
-					if (makespan2 > makespan1) {
-
-						detected = true;
-
-					}
-
-				}
-
-				if (detected == false) {
-
-					unlabelled++;
-				} else {
-					anomalyYes++;
-
-				}
-
-			} else {
-				
-				advantage += (WCRT - makespan1)/(double)makespan1 ;
-				
-//				System.out.print("\n we have WCRT: "+ WCRT + " we have simulated makepsan: " + makespan1);
+//			if (new AnomalyAnalysis().AnalyzeAnomaly(tasks.get(0).DagList, core)) {
+//
+//				boolean detected = false;
+//
+//				for (int j = 0; j < 10000; j++) {
+//
+//					ArrayList<Core> corelist = new Makespan().getMakespan(tasks.get(0).DagList, core, "random");
+//
+//					makespan2 = new AnalysisUtil().getMakespan(corelist);
+//
+//					if (makespan2 > makespan1) {
+//
+//						detected = true;
+//
+//					}
+//
+//				}
+//
+//				if (detected == false) {
+//
+//					unlabelled++;
+//				} else {
+//					anomalyYes++;
+//
+//				}
+//
+//			} else {
 //				
-//				System.out.print(" \n the advantage is " + advantage);
-				anomalyNo++;
-
-			}
+//				advantage += (WCRT - makespan1)/(double)makespan1 ;
+//				
+////				System.out.print("\n we have WCRT: "+ WCRT + " we have simulated makepsan: " + makespan1);
+////				
+////				System.out.print(" \n the advantage is " + advantage);
+//				anomalyNo++;
+//
+//			}
 			
 			
 			
-			meanAdvantage = Math.round(advantage*10000/(double)anomalyNo)/100;
+//			meanAdvantage = Math.round(advantage*10000/(double)anomalyNo)/100;
 			
 //			System.out.print("\n we have WCRT: "+ WCRT + " we have simulated makepsan: " + makespan1);
 
 		}
 
-		System.out.print("\n For Core: " + core + ", Parallelism: " + parallelism + ", Length: " + critical_path);
-
-
-		System.out.print(
-				"\n We have Anomaly: " + anomalyYes + ", Anomaly-free: " + anomalyNo + ", unlabelled: " + unlabelled);
-		
-		System.out.print(
-				"\n We have meanAdvantage: " + meanAdvantage);
+//		System.out.print("\n For Core: " + core + ", Parallelism: " + parallelism + ", Length: " + critical_path);
+//
+//
+//		System.out.print(
+//				"\n We have Anomaly: " + anomalyYes + ", Anomaly-free: " + anomalyNo + ", unlabelled: " + unlabelled);
+//		
+//		System.out.print(
+//				"\n We have meanAdvantage: " + meanAdvantage);
 	}
 
 

@@ -57,7 +57,7 @@ public class Makespan {
 
 			}
 			
-	// debug		
+//	// debug		
 //			if(readytask.size() == 0) {
 //				
 //				System.out.print("\n the size of whole DAG is" + tdag.size());
@@ -100,6 +100,7 @@ public class Makespan {
 //
 //				
 //			}
+			/////
 			readytask.sort((p1, p2) -> Integer.compare(p1.getPriority(), p2.getPriority()));
 
 			for (int i = 0; i < readytask.size(); i++) {

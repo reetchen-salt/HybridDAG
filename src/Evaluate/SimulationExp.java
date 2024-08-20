@@ -29,7 +29,7 @@ public class SimulationExp {
 	static PrintWriter writer = null;
 	static PrintWriter writer2 = null;
 	int count = 0;
-	static String filePath = "data/51experiments.csv";
+	static String filePath = "data/newTCdata.csv";
 
 	public synchronized void countDown(CountDownLatch cd) {
 		cd.countDown();
@@ -55,9 +55,9 @@ public class SimulationExp {
 	        }
 			
 
-        int[] Core = { 3, 4, 5, 6, 7, 8 };
-        int[] Par = {  3, 4, 5, 6, 7, 8 };
-        int[] Cri = {  3, 4, 5, 6, 7, 8};
+        int[] Core = { 3, 4, 5, 6, 7, 8,9};
+        int[] Par = {  5, 6, 7, 8,9,10,11 };
+        int[] Cri = {  5, 6, 7, 8, 9, 10,11};
         double[] ratio = { 0.5 };
         int times = 1000;
 
@@ -141,7 +141,7 @@ public class SimulationExp {
 
 			tasks.get(0).setPriority(0);
 
-			new PriorityGenerator().MyAssignment(tasks.get(0));
+			new PriorityGenerator().He2021(tasks.get(0));
 			
 			
 	
