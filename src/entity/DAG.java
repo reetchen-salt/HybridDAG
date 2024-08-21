@@ -213,30 +213,32 @@ public class DAG {
 
 //	      TotalWCET =100;
 
-        // List to store the utilization values for each task
-        List<Double> utilList = new ArrayList<>();
-        Random rand = new Random();
-        
-        // Remaining total utilization to be distributed
-        double remainingUtilization = this.util;
-        
-        // Randomly distribute utilization to numTasks - 1 tasks
-        for (int i = 1; i < DagList.size(); i++) {
-            // Generate a random number between 0 and 1
-            double randVal = rand.nextDouble();
-            
-            // Calculate the utilization for the current task based on remaining utilization
-            double nextUtil = remainingUtilization * (1 - Math.pow(randVal, 1.0 / ( DagList.size() - i)));
-            
-            // Add the calculated utilization to the list
-            utilList.add(nextUtil);
-            
-            // Reduce the remaining total utilization by the assigned amount
-            remainingUtilization -= nextUtil;
-        }
-        
-        // Assign the remaining utilization to the last task
-        utilList.add(remainingUtilization);
+	       List<Long> timeList = new ArrayList<>();
+	        Random rand = new Random();
+	        
+	        // Remaining total WCET to be distributed
+	        long remainingWCET = TotalWCET;
+	        
+	        // Randomly distribute WCET to numTasks - 1 tasks
+	        for (int i = 1; i < DagList.size(); i++) {
+	            // Generate a random number between 0 and 1
+	            double randVal = rand.nextDouble();
+	            
+	            // Calculate the WCET for the current task based on remaining WCET
+	            long nextTime = (long) (remainingWCET * (1 - Math.pow(randVal, 1.0 / (DagList.size() - i))));
+	            
+	            System.out.print("\n the genrated WCET is:" + nextTime);
+	            
+	            // Add the calculated WCET to the list
+	            timeList.add(nextTime);
+	            
+	            // Reduce the remaining total WCET by the assigned amount
+	            remainingWCET -= nextTime;
+	        }
+	        
+	        // Assign the remaining WCET to the last task
+	        timeList.add(remainingWCET);
+	        
         
         
         
@@ -284,11 +286,11 @@ public class DAG {
 
 		WCETList = new long[DagList.size()];
 
-		for (int i = 0; i < utilList.size(); i++) {
+		for (int i = 0; i < timeList.size(); i++) {
 			
 			
 			
-			long theWCET = (long)(utilList.get(i)*this.period);
+			long theWCET = timeList.get(i);
 			
 			if(theWCET < 5) {
 				
