@@ -29,7 +29,7 @@ public class SimulationExp {
 	static PrintWriter writer = null;
 	static PrintWriter writer2 = null;
 	int count = 0;
-	static String filePath = "data/newTCdata.csv";
+	static String filePath = "data/827data.csv";
 
 	public synchronized void countDown(CountDownLatch cd) {
 		cd.countDown();
@@ -58,7 +58,7 @@ public class SimulationExp {
         int[] Core = { 3, 4, 5, 6, 7, 8,9};
         int[] Par = {  5, 6, 7, 8,9,10,11 };
         int[] Cri = {  5, 6, 7, 8, 9, 10,11};
-        double[] ratio = { 0.5 };
+        double[] ratio = { 0.2,0.3,0.4,0.5,0.6,0.7,0.8 };
         int times = 1000;
 
         // Calculate the total number of threads/tasks to wait for
