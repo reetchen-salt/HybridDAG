@@ -227,7 +227,7 @@ public class DAG {
 	            // Calculate the WCET for the current task based on remaining WCET
 	            long nextTime = (long) (remainingWCET * (1 - Math.pow(randVal, 1.0 / (DagList.size() - i))));
 	            
-	            System.out.print("\n the genrated WCET is:" + nextTime);
+//	            System.out.print("\n the genrated WCET is:" + nextTime);
 	            
 	            // Add the calculated WCET to the list
 	            timeList.add(nextTime);

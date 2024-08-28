@@ -58,7 +58,7 @@ public class SimulationExp {
         int[] Core = { 3, 4, 5, 6, 7, 8,9};
         int[] Par = {  5, 6, 7, 8,9,10,11 };
         int[] Cri = {  5, 6, 7, 8, 9, 10,11};
-        double[] ratio = { 0.2,0.3,0.4,0.5,0.6,0.7,0.8 };
+        double[] ratio = { 0.5 };
         int times = 1000;
 
         // Calculate the total number of threads/tasks to wait for
@@ -142,10 +142,12 @@ public class SimulationExp {
 			tasks.get(0).setPriority(0);
 
 			new PriorityGenerator().He2021(tasks.get(0));
-			
-			
-	
-			
+//			
+//			System.out.print("\n Setting Core: " + core+", Parallel: " + parallelism + ", Length: " + critical_path );
+//			
+//			System.out.print("\n the period of the task is"+ tasks.get(0).period );
+//			
+//			
 			WCRT = new Analysis.Nonpreemptive().WCmakespan(tasks.get(0), core);
 			
 			

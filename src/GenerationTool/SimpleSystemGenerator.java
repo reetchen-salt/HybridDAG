@@ -31,7 +31,7 @@ public class SimpleSystemGenerator {
 		this.isLogUni = isPeriodLogUni;
 	
 		this.print = false;
-		this.ran = new Random(seed);
+		this.ran = new Random(System.currentTimeMillis());
 		this.parallelism = parallelism;
 		this.critical_path = critical_path;
 	}
