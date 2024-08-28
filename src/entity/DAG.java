@@ -294,7 +294,7 @@ public class DAG {
 			
 			if(theWCET < 5) {
 				
-				theWCET = rand.nextInt(991) + 10; 
+				theWCET = rand.nextInt(10) + 5; 
 			}
 
 			WCETList[i] = theWCET ;
