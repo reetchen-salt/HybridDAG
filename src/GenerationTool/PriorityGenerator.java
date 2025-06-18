@@ -1013,9 +1013,7 @@ public class PriorityGenerator {
 		
 		}
 		
-//		int p = task.getPriority()*1000;
-		
-		int p = 0;
+		int p = task.getPriority()*1000;
 		
 		for(int i=0; i<DagArray.size();i++) {
 			for(int j=0; j<DagArray.get(i).size();j++) {
