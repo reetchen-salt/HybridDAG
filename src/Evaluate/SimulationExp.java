@@ -29,7 +29,7 @@ public class SimulationExp {
 	static PrintWriter writer = null;
 	static PrintWriter writer2 = null;
 	int count = 0;
-	static String filePath = "data/829data.csv";
+	static String filePath = "data/Newdata.csv";
 
 	public synchronized void countDown(CountDownLatch cd) {
 		cd.countDown();
@@ -47,17 +47,19 @@ public class SimulationExp {
 	            
     	    // Writing the header row with updated headers
 			printWriter.println(
-					"MaxMakespan,MinMakespan,MinWorkload,MaxWorkload,MaxWCET,MinWCET,MedianWCET,NumNodes,MaxParallel,CriticalPath,AvgInDegree,AvgOutDegree,CoreNum,IsAnomaly,Par,Cri,WCRT,Advantage");
+					"MaxMakespan,MinMakespan,MinWorkload,MaxWorkload,MaxWCET,MinWCET,MedianWCET,NumNodes,MaxParallel,CriticalPath,AvgInDegree,AvgOutDegree,CoreNum,IsAnomaly,Par,Cri,Nan,He,Serrano, AdvantageNan,AdvantageHe,AdvantageSerrano");
 
 	        } catch (IOException e) {
 	            System.err.println("An error occurred while writing the file.");
 	            e.printStackTrace();
 	        }
-			
+//        int[] Core = { 16};
+//        int[] Par = {  15};
+//        int[] Cri = { 15};	
 
-        int[] Core = { 3, 4, 5, 6, 7, 8,9};
-        int[] Par = {  5, 6, 7, 8,9,10,11 };
-        int[] Cri = {  5, 6, 7, 8, 9, 10,11};
+        int[] Core = { 2, 4, 6, 8, 10, 12,14,16};
+        int[] Par = {  4,5,6,7,8,9,10,11,12,13,14,15};
+        int[] Cri = {  4,5,6,7,8,9,10,11,12,13,14,15};
         double[] ratio = { 0.5 };
         int times = 1000;
 
@@ -105,8 +107,12 @@ public class SimulationExp {
 				critical_path, ratio);
 		
 		
-		double advantage = 0;
-		long WCRT = 0;
+		double advantageNan = 0;
+		double advantageHe = 0;
+		double advantageSerrano =0;
+		long Nan = 0;
+		long He = 0;
+		long Serrano =0;
 		long makespan1 = 0;
 		long makespan2 =0;
 		long MaxMakespan = 0;
@@ -131,15 +137,17 @@ public class SimulationExp {
 //		double tighterP= 0;
 
 		
-		System.out.print("\n Setting Core: " + core+", Parallel: " + parallelism + ", Length: " + critical_path );
+//		System.out.print("\n Setting Core: " + core+", Parallel: " + parallelism + ", Length: " + critical_path );
 		
 		for (int i = 0; i < TOTAL_NUMBER_OF_DAGs; i++) {
 			
-		
-
+			
+			System.out.print("\n Setting Core: " + core+", Parallel: " + parallelism + ", Length: " + critical_path +" number : "+ i);
 			ArrayList<DAG> tasks = generator.generateTasks();
 
 			tasks.get(0).setPriority(0);
+			
+//			DAG task0  = new DAG( parallelism, critical_path);
 
 			new PriorityGenerator().He2021(tasks.get(0));
 //			
@@ -148,13 +156,20 @@ public class SimulationExp {
 //			System.out.print("\n the period of the task is"+ tasks.get(0).period );
 //			
 //			
-			WCRT = new Analysis.Nonpreemptive().WCmakespan(tasks.get(0), core);
+			Nan = new Analysis.Nonpreemptive().WCmakespan(tasks.get(0) , core);
 			
+			He = new Analysis.NonHe2021().WCmakespan(tasks.get(0), core);
+			
+			Serrano = new Analysis.Melanni2015().WCmakespan(tasks.get(0) , core);
 			
 			
 			MaxMakespan = new AnalysisUtil().getMakespan(new Makespan().getMakespan(tasks.get(0).DagList, core,"max"));
 			
-			advantage = Math.ceil(((WCRT - MaxMakespan) / (double) MaxMakespan * 100) * 100) / 100.0;
+			advantageNan = Math.ceil(((Nan - MaxMakespan) / (double) MaxMakespan * 100) * 100) / 100.0;
+			
+			advantageHe = Math.ceil(((He - MaxMakespan) / (double) MaxMakespan * 100) * 100) / 100.0;
+			
+			advantageSerrano = Math.ceil(((Serrano - MaxMakespan) / (double) MaxMakespan * 100) * 100) / 100.0;
 
 			
 			MinMakespan = new AnalysisUtil().getMakespan(new Makespan().getMakespan(tasks.get(0).DagList, core,"min"));
@@ -206,7 +221,7 @@ public class SimulationExp {
 //					new Util.PrintGantt(corelist, makespan1,"max");
 					
 					
-					for (int j = 0; j < 10000; j++) {
+					for (int j = 0; j < 100000; j++) {
 						
 						
 						ArrayList<Core> corelist2 = new Makespan().getMakespan(tasks.get(0).DagList, core, "random");
@@ -221,6 +236,7 @@ public class SimulationExp {
 						if (makespan2 > makespan1) {
 
 							IsAnomaly = 1;
+							break;
 						}
 
 					}
@@ -234,40 +250,23 @@ public class SimulationExp {
 				
 				
 				
-				try (FileWriter fileWriter = new FileWriter(filePath, true);
-					     PrintWriter printWriter = new PrintWriter(fileWriter)) {
-					    
-				
-					    // Formatting and writing the data row
-					    String dataRow = String.format("%d,%d,%d,%d,%d,%d,%f,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%2f",
-					        MaxMakespan,
-					        MinMakespan,
-					        MinWorkload,
-					        MaxWorkload,
-					        MaxWCET,
-					        MinWCET,
-					        MedianWCET,
-					        NumNodes,
-					        MaxParallel,
-					        CriticalPath,
-					        AvgInDegree,
-					        AvgOutDegree,
-					        CoreNum,
-					        IsAnomaly,
-					        parallelism,
-					        critical_path,
-					        WCRT,
-					        advantage
-					    );
+				synchronized (SimulationExp.class) {
+				    try (FileWriter fileWriter = new FileWriter(filePath, true);
+				         PrintWriter printWriter = new PrintWriter(fileWriter)) {
 
-					    // Writing the data row
-					    printWriter.println(dataRow);
+				        // Formatting and writing the data row
+				        String dataRow = String.format("%d,%d,%d,%d,%d,%d,%f,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%2f,%2f,%2f",
+				            MaxMakespan, MinMakespan, MinWorkload, MaxWorkload, MaxWCET, MinWCET, MedianWCET, NumNodes, MaxParallel,
+				            CriticalPath, AvgInDegree, AvgOutDegree, CoreNum, IsAnomaly, parallelism, critical_path, Nan, He, Serrano, advantageNan, advantageHe, advantageSerrano);
 
-					} catch (IOException e) {
-					    System.err.println("An error occurred while writing the file.");
-					    e.printStackTrace();
-					}
-				
+				        printWriter.println(dataRow);
+
+				    } catch (IOException e) {
+				        System.err.println("An error occurred while writing the file.");
+				        e.printStackTrace();
+				    }
+				}
+
 		    
 		   
 
